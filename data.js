@@ -9,19 +9,19 @@ const TYPE_COLORS = {
 
 const DATA = {
     pokedex: [
-        { id: 1, name: "Sprigatito", types: ["Grass"], base: true, evolutions: [{ to: "Floragato", at: 16 }] }, 
-        { id: 2, name: "Floragato", types: ["Grass"], evolutions: [{ to: "Meowscarada", at: 36 }] }, 
-        { id: 3, name: "Meowscarada", types: ["Grass", "Dark"], evolutions: [] },
-        { id: 4, name: "Fuecoco", types: ["Fire"], base: true, evolutions: [{ to: "Crocalor", at: 16 }] }, 
-        { id: 5, name: "Crocalor", types: ["Fire"], evolutions: [{ to: "Skeledirge", at: 36 }] }, 
-        { id: 6, name: "Skeledirge", types: ["Fire", "Ghost"], evolutions: [] },
-        { id: 7, name: "Quaxly", types: ["Water"], base: true, evolutions: [{ to: "Quaxwell", at: 16 }] }, 
-        { id: 8, name: "Quaxwell", types: ["Water"], evolutions: [{ to: "Quaquaval", at: 36 }] }, 
-        { id: 9, name: "Quaquaval", types: ["Water", "Fighting"], evolutions: [] },
-        { id: 10, name: "Lechonk", types: ["Normal"], base: true, evolutions: [{ to: "Oinkologne", at: 18 }] }, 
-        { id: 11, name: "Oinkologne", types: ["Normal"], evolutions: [] }, 
-        { id: 12, name: "Tarountula", types: ["Bug"], base: true, evolutions: [{ to: "Spidops", at: 15 }] },
-        { id: 13, name: "Spidops", types: ["Bug"], evolutions: [] },
+        { id: 1, name: "Sprigatito", types: ["Grass"], base: true, evolutions: [{ to: "Floragato", at: 16 }], genders: ["Male", "Female"] }, 
+        { id: 2, name: "Floragato", types: ["Grass"], evolutions: [{ to: "Meowscarada", at: 36 }], genders: ["Male", "Female"] }, 
+        { id: 3, name: "Meowscarada", types: ["Grass", "Dark"], evolutions: [], genders: ["Male", "Female"] },
+        { id: 4, name: "Fuecoco", types: ["Fire"], base: true, evolutions: [{ to: "Crocalor", at: 16 }], genders: ["Male", "Female"] }, 
+        { id: 5, name: "Crocalor", types: ["Fire"], evolutions: [{ to: "Skeledirge", at: 36 }], genders: ["Male", "Female"] }, 
+        { id: 6, name: "Skeledirge", types: ["Fire", "Ghost"], evolutions: [], genders: ["Male", "Female"] },
+        { id: 7, name: "Quaxly", types: ["Water"], base: true, evolutions: [{ to: "Quaxwell", at: 16 }], genders: ["Male", "Female"] }, 
+        { id: 8, name: "Quaxwell", types: ["Water"], evolutions: [{ to: "Quaquaval", at: 36 }], genders: ["Male", "Female"] }, 
+        { id: 9, name: "Quaquaval", types: ["Water", "Fighting"], evolutions: [], genders: ["Male", "Female"] },
+        { id: 10, name: "Lechonk", types: ["Normal"], base: true, evolutions: [{ to: "Oinkologne", at: 18 }], genders: ["Male", "Female"] }, 
+        { id: 11, name: "Oinkologne", types: ["Normal"], evolutions: [], genders: ["Male", "Female"] }, 
+        { id: 12, name: "Tarountula", types: ["Bug"], base: true, evolutions: [{ to: "Spidops", at: 15 }], genders: ["Male", "Female"] },
+        { id: 13, name: "Spidops", types: ["Bug"], evolutions: [], genders: ["Male", "Female"] },
     ],
     gyms: [
         { name: "Cortondo Gym", leader: "Katy", type: "Bug" }, { name: "Artazon Gym", leader: "Brassius", type: "Grass" },
@@ -35,8 +35,13 @@ const DATA = {
         "Choice Scarf", "Choice Specs", "Eviolite", "Expert Belt", "Focus Sash", "Leftovers", "Life Orb", "Rocky Helmet", "Scope Lens"
     ],
     moves: [
-        "Tackle", "Growl", "Scratch", "Ember", "Water Gun", "Vine Whip", "Thunder Shock", "Quick Attack", "Hyper Beam", "Solar Beam", 
-        "Flamethrower", "Hydro Pump", "Thunderbolt", "Ice Beam", "Psychic", "Shadow Ball", "Earthquake", "Rock Slide", "Dragon Claw", "Swords Dance"
+        { name: "Tackle", type: "Normal" }, { name: "Growl", type: "Normal" }, { name: "Scratch", type: "Normal" },
+        { name: "Ember", type: "Fire" }, { name: "Water Gun", type: "Water" }, { name: "Vine Whip", type: "Grass" },
+        { name: "Thunder Shock", type: "Electric" }, { name: "Quick Attack", type: "Normal" }, { name: "Hyper Beam", type: "Normal" },
+        { name: "Solar Beam", type: "Grass" }, { name: "Flamethrower", type: "Fire" }, { name: "Hydro Pump", type: "Water" },
+        { name: "Thunderbolt", type: "Electric" }, { name: "Ice Beam", type: "Ice" }, { name: "Psychic", type: "Psychic" },
+        { name: "Shadow Ball", type: "Ghost" }, { name: "Earthquake", type: "Ground" }, { name: "Rock Slide", type: "Rock" },
+        { name: "Dragon Claw", type: "Dragon" }, { name: "Swords Dance", type: "Normal" }
     ]
 };
 
