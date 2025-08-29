@@ -37,7 +37,7 @@ function loadState() {
 function saveState() {
     try {
         localStorage.setItem('pokemonTrackerState', JSON.stringify(appState));
-        // console.log("State saved successfully:", appState);
+        // console.log("State saved successfully:", appState); // For debugging
     } catch (e) {
         console.error("Failed to save state:", e);
     }
@@ -67,7 +67,7 @@ function toggleTheme() {
 
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
-    // console.log(`Updating ${pokemonName}. Clicked: ${clickedStatus}. Current: ${appState.pokedex[pokemonName]}`);
+    // console.log(`Updating ${pokemonName}. Clicked: ${clickedStatus}. Current: ${appState.pokedex[pokemonName]}`); // For debugging
     const currentStatus = appState.pokedex[pokemonName];
     
     // Logic: If you click the same status icon, it toggles off (becomes null). Otherwise, it sets the new status.
