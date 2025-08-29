@@ -21,17 +21,12 @@ function loadState() {
         const initialState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [] };
         appState = savedState ? JSON.parse(savedState) : initialState;
         
-        if (!appState.team || !Array.isArray(appState.team) || appState.team.length !== 6) {
-            appState.team = Array(6).fill(null);
-        }
-        if (typeof appState.pokedex !== 'object' || appState.pokedex === null) {
-            appState.pokedex = {};
-        }
-        CATEGORIES.forEach(cat => {
-            if (!appState[cat.id] || !Array.isArray(appState[cat.id])) {
-                appState[cat.id] = [];
-            }
-        });
+        // Ensure all parts of the state are correctly initialized to prevent errors
+        if (!appState.pokedex || typeof appState.pokedex !== 'object') appState.pokedex = {};
+        if (!appState.team || !Array.isArray(appState.team)) appState.team = Array(6).fill(null);
+        if (!appState.gyms || !Array.isArray(appState.gyms)) appState.gyms = [];
+        if (!appState.tms || !Array.isArray(appState.tms)) appState.tms = [];
+        if (!appState.items || !Array.isArray(appState.items)) appState.items = [];
 
     } catch (e) {
         console.error("Could not load or parse state, resetting.", e);
@@ -42,6 +37,7 @@ function loadState() {
 function saveState() {
     try {
         localStorage.setItem('pokemonTrackerState', JSON.stringify(appState));
+        // console.log("State saved successfully:", appState);
     } catch (e) {
         console.error("Failed to save state:", e);
     }
@@ -71,15 +67,22 @@ function toggleTheme() {
 
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
+    // console.log(`Updating ${pokemonName}. Clicked: ${clickedStatus}. Current: ${appState.pokedex[pokemonName]}`);
     const currentStatus = appState.pokedex[pokemonName];
-    appState.pokedex[pokemonName] = currentStatus === clickedStatus ? null : clickedStatus;
     
-    if (appState.pokedex[pokemonName] === null) {
+    // Logic: If you click the same status icon, it toggles off (becomes null). Otherwise, it sets the new status.
+    const newStatus = currentStatus === clickedStatus ? null : clickedStatus;
+
+    if (newStatus === null) {
         delete appState.pokedex[pokemonName];
+    } else {
+        appState.pokedex[pokemonName] = newStatus;
     }
     
-    saveState(); // CRITICAL FIX: Ensures state is saved to localStorage after every update.
+    // THIS IS THE CRITICAL FIX. IT SAVES THE STATE TO LOCALSTORAGE AFTER EVERY SINGLE CLICK.
+    saveState(); 
     
+    // Re-render all affected components to show the change immediately.
     renderPokedex();
     renderDashboard();
     renderTeamBuilder();
@@ -411,9 +414,15 @@ function setupEventListeners() {
             return;
         }
 
-        const teamCard = e.target.closest('.team-summary-card');
+        const teamCard = e.target.closest('.team-summary-card, .empty-team-slot');
         if (teamCard) {
-            openEditorModal(parseInt(teamCard.dataset.index));
+            const index = parseInt(teamCard.dataset.index);
+            if (appState.team[index]) {
+                openEditorModal(index);
+            } else {
+                // Smooth scroll to the box search input
+                document.getElementById('box-search')?.focus({ preventScroll: false });
+            }
             return;
         }
         
@@ -456,7 +465,9 @@ function initializeApp() {
     loadState();
     const savedTheme = localStorage.getItem('theme') || 'dark';
     applyTheme(savedTheme);
-    renderView('dashboard');
+    renderView('dashboard'); // Start on the dashboard
+    document.querySelector('.nav-btn[data-view="dashboard"]').classList.add('active');
+    document.getElementById('dashboard-view').classList.add('active');
     setupEventListeners();
 }
 
