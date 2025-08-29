@@ -177,7 +177,7 @@ function closePokedexDetailModal() {
 }
 
 
-// --- RENDERING FUNCTIONS (Placed before they are called) ---
+// --- RENDERING FUNCTIONS ---
 function renderDashboard() {
     const container = document.getElementById('dashboard-view');
     const pokedexProgress = POKEDEX_STATUSES.map(status => {
@@ -543,12 +543,6 @@ function initializeApp() {
     document.getElementById('dashboard-view').classList.add('active');
     setupEventListeners();
 }
-
-// Ensure the render functions are available globally before they are called.
-// This structure prevents the ReferenceError.
-const { renderDashboard, renderPokedex, renderTeamBuilder, renderGyms, renderGenericList, renderTypeAnalysis, renderPokemonEditor } = (() => {
-    return { renderDashboard, renderPokedex, renderTeamBuilder, renderGyms, renderGenericList, renderTypeAnalysis, renderPokemonEditor };
-})();
 
 // Initial call to start the application
 initializeApp();
