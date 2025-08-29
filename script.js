@@ -20,12 +20,20 @@ function loadState() {
         const savedState = localStorage.getItem('pokemonTrackerState');
         const initialState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [] };
         appState = savedState ? JSON.parse(savedState) : initialState;
+        
+        // Ensure all parts of the state are correctly initialized
         if (!appState.team || !Array.isArray(appState.team) || appState.team.length !== 6) {
             appState.team = Array(6).fill(null);
         }
         if (typeof appState.pokedex !== 'object' || appState.pokedex === null) {
             appState.pokedex = {};
         }
+        CATEGORIES.forEach(cat => {
+            if (!appState[cat.id] || !Array.isArray(appState[cat.id])) {
+                appState[cat.id] = [];
+            }
+        });
+
     } catch (e) {
         console.error("Could not load or parse state, resetting.", e);
         appState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [] };
@@ -33,7 +41,11 @@ function loadState() {
 }
 
 function saveState() {
-    localStorage.setItem('pokemonTrackerState', JSON.stringify(appState));
+    try {
+        localStorage.setItem('pokemonTrackerState', JSON.stringify(appState));
+    } catch (e) {
+        console.error("Failed to save state:", e);
+    }
 }
 
 // --- THEME MANAGEMENT ---
@@ -61,14 +73,21 @@ function toggleTheme() {
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
     const currentStatus = appState.pokedex[pokemonName];
+    // If the current status is the same as the clicked one, toggle it off (set to null).
+    // Otherwise, set it to the new status.
     appState.pokedex[pokemonName] = currentStatus === clickedStatus ? null : clickedStatus;
-    if (appState.pokedex[pokemonName] === null) delete appState.pokedex[pokemonName];
+    
+    // If the status is null, remove the key from the object for cleaner data.
+    if (appState.pokedex[pokemonName] === null) {
+        delete appState.pokedex[pokemonName];
+    }
     
     saveState();
     renderPokedex();
     renderDashboard();
     renderTeamBuilder();
 }
+
 
 function updateCheckboxState(category, itemName, isChecked) {
     const items = new Set(appState[category] || []);
