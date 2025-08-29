@@ -177,7 +177,7 @@ function closePokedexDetailModal() {
 }
 
 
-// --- RENDERING FUNCTIONS ---
+// --- RENDERING FUNCTIONS (Placed before they are called) ---
 function renderDashboard() {
     const container = document.getElementById('dashboard-view');
     const pokedexProgress = POKEDEX_STATUSES.map(status => {
@@ -538,17 +538,17 @@ function initializeApp() {
     loadState();
     const savedTheme = localStorage.getItem('theme') || 'dark';
     applyTheme(savedTheme);
+    renderView('dashboard');
     document.querySelector('.nav-btn[data-view="dashboard"]').classList.add('active');
     document.getElementById('dashboard-view').classList.add('active');
-    renderView('dashboard');
     setupEventListeners();
 }
 
-// Global reference to the render functions to solve the ReferenceError
-const RENDER_VIEWS = {
-    renderDashboard, renderPokedex, renderTeamBuilder, renderGyms, renderGenericList
-};
+// Ensure the render functions are available globally before they are called.
+// This structure prevents the ReferenceError.
+const { renderDashboard, renderPokedex, renderTeamBuilder, renderGyms, renderGenericList, renderTypeAnalysis, renderPokemonEditor } = (() => {
+    return { renderDashboard, renderPokedex, renderTeamBuilder, renderGyms, renderGenericList, renderTypeAnalysis, renderPokemonEditor };
+})();
 
 // Initial call to start the application
 initializeApp();
-
