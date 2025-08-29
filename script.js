@@ -23,7 +23,6 @@ function loadState() {
         if (!appState.team || !Array.isArray(appState.team) || appState.team.length !== 6) {
             appState.team = Array(6).fill(null);
         }
-        // Ensure pokedex is an object
         if (typeof appState.pokedex !== 'object' || appState.pokedex === null) {
             appState.pokedex = {};
         }
@@ -42,12 +41,12 @@ function applyTheme(theme) {
     const themeIcon = document.getElementById('theme-icon');
     if (theme === 'light') {
         document.body.classList.add('light-mode');
-        themeIcon.classList.remove('fa-sun', 'text-yellow-300');
-        themeIcon.classList.add('fa-moon', 'text-indigo-400');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
     } else {
         document.body.classList.remove('light-mode');
-        themeIcon.classList.remove('fa-moon', 'text-indigo-400');
-        themeIcon.classList.add('fa-sun', 'text-yellow-300');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
     }
 }
 
@@ -203,10 +202,10 @@ function renderDashboard() {
             <div class="flex justify-between items-center mb-1 text-sm text-secondary">
                 <span>Progress</span><span>${item.completed} / ${item.total}</span>
             </div>
-            <div class="w-full progress-bar-bg rounded-full h-2.5"><div class="progress-bar-fill h-2.5 rounded-full" style="width: ${percentage}%"></div></div>
+            <div class="w-full progress-bar-bg rounded-full h-1.5"><div class="progress-bar-fill h-1.5 rounded-full" style="width: ${percentage}%"></div></div>
         </div>`;
     }).join('');
-    container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>`;
+    container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${cards}</div>`;
 }
 
 function renderPokedex() {
@@ -222,11 +221,11 @@ function renderPokedex() {
         
         return `<div class="pokedex-item">
             <div class="flex items-center justify-between">
-                <span class="text-primary font-medium">${p.id}. ${p.name}</span>
+                <span class="text-primary font-medium">${String(p.id).padStart(3,'0')}. ${p.name}</span>
                 <div class="pokedex-status-icons" data-pokemon-name="${p.name}">
                     <i class="fas fa-eye status-icon ${seenClass}" data-status="seen"></i>
                     <i class="fas fa-fist-raised status-icon ${battledClass}" data-status="battled"></i>
-                    <i class="fas fa-circle-check status-icon ${caughtClass}" data-status="caught"></i>
+                    <i class="fas fa-check-circle status-icon ${caughtClass}" data-status="caught"></i>
                 </div>
             </div>
             <div class="mt-2 flex gap-1.5">${typesHtml}</div>
@@ -243,7 +242,7 @@ function renderTeamBuilder() {
     const filter = container.querySelector('#box-search')?.value.toLowerCase() || '';
     
     const teamSlots = appState.team.map((member, index) => {
-        if (!member) return `<div class="empty-team-slot" data-index="${index}"><i class="fas fa-plus text-4xl text-slate-600"></i></div>`;
+        if (!member) return `<div class="empty-team-slot" data-index="${index}"><i class="fas fa-plus text-4xl text-secondary"></i></div>`;
         const speciesData = DATA.pokedex.find(p => p.name === member.species);
         const typesHtml = speciesData.types.map(type => `<span class="type-badge ${TYPE_COLORS[type]}">${type}</span>`).join(' ');
         const genderIcon = member.gender === 'Male' ? '<i class="fas fa-mars gender-icon gender-male"></i>' : member.gender === 'Female' ? '<i class="fas fa-venus gender-icon gender-female"></i>' : '';
@@ -251,7 +250,7 @@ function renderTeamBuilder() {
             <p class="font-bold text-xl text-heading">${member.nickname}</p>
             <p class="text-sm text-secondary">Lv. ${member.level} ${member.species}${genderIcon}</p>
             <div class="my-2 flex gap-1.5 justify-center">${typesHtml}</div>
-            <p class="text-xs text-slate-500 truncate mt-2">Held Item: ${member.item || 'None'}</p>
+            <p class="text-xs text-secondary truncate mt-2">Held Item: ${member.item || 'None'}</p>
         </div>`;
     }).join('');
 
@@ -259,9 +258,9 @@ function renderTeamBuilder() {
     const caughtChains = new Set(caughtPokemonNames.flatMap(name => getPokemonInChain(name)));
     const baseFormsToShow = DATA.pokedex.filter(p => p.base && caughtChains.has(p.name)).map(p => p.name);
     
-    const boxItems = baseFormsToShow.filter(name => name.toLowerCase().includes(filter)).map(name => `<div class="box-pokemon" data-name="${name}"><span>${name}</span><i class="fas fa-plus text-slate-400"></i></div>`).join('');
+    const boxItems = baseFormsToShow.filter(name => name.toLowerCase().includes(filter)).map(name => `<div class="box-pokemon" data-name="${name}"><span>${name}</span><i class="fas fa-plus text-secondary"></i></div>`).join('');
 
-    container.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    container.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
             <h2 class="text-3xl font-bold text-heading mb-4">My Team</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${teamSlots}</div>
@@ -284,7 +283,7 @@ function renderGenericList(category, title) {
         const name = item.name || item;
         const isChecked = appState[id]?.includes(name);
         return `<label class="pokedex-item flex items-center cursor-pointer">
-            <input type="checkbox" data-category="${id}" data-name="${name}" class="h-5 w-5 rounded bg-slate-600 border-slate-500 text-pink-500 focus:ring-pink-500" ${isChecked ? 'checked' : ''}>
+            <input type="checkbox" data-category="${id}" data-name="${name}" class="h-5 w-5 rounded text-accent-blue focus:ring-accent-blue" ${isChecked ? 'checked' : ''}>
             <span class="ml-3 text-primary">${item.id ? `TM${String(item.id).padStart(3, '0')}: ` : ''}${name}</span>
         </label>`;
     }).join('');
@@ -299,7 +298,7 @@ function renderGyms() {
     const items = DATA.gyms.map(gym => {
         const isChecked = appState.gyms?.includes(gym.name);
         return `<div class="card flex items-center">
-            <input type="checkbox" data-category="gyms" data-name="${gym.name}" class="h-6 w-6 rounded bg-slate-600 border-slate-500 text-pink-500 focus:ring-pink-500" ${isChecked ? 'checked' : ''}>
+            <input type="checkbox" data-category="gyms" data-name="${gym.name}" class="h-6 w-6 rounded text-accent-blue focus:ring-accent-blue" ${isChecked ? 'checked' : ''}>
             <div class="ml-4 flex-grow">
                 <h4 class="font-bold text-lg text-heading">${gym.name}</h4>
                 <p class="text-secondary">${gym.leader}</p>
@@ -317,28 +316,20 @@ function renderPokemonEditor() {
 
     const itemOptions = '<option value="">None</option>' + DATA.items.map(i => `<option value="${i}">${i}</option>`).join('');
     
-    // Create move options with types
-    const moveOptions = '<option value="">-</option>' + DATA.moves.map(m => {
-        return `<option value="${m.name}">${m.name}</option>`;
-    }).join('');
-    const moveSelectHTML = (id, selectedMove) => {
-        let html = `<select class="form-input" id="edit-move-${id}">`;
-        html += '<option value="">-</option>';
-        html += DATA.moves.map(m => {
+    const moveOptionsHTML = (id, selectedMove) => {
+        let options = '<option value="">-</option>';
+        options += DATA.moves.map(m => {
             const isSelected = m.name === selectedMove ? 'selected' : '';
             return `<option value="${m.name}" ${isSelected}>${m.name} (${m.type})</option>`;
         }).join('');
-        html += `</select>`;
-        return html;
+        return `<select class="form-input" id="edit-move-${id}">${options}</select>`;
     };
-
-
-    // Create gender options based on species data
+    
     const genderOptions = speciesData.genders.map(g => `<option value="${g}">${g}</option>`).join('');
 
     document.getElementById('summary-tab').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div><label class="form-label">Nickname</label><input type="text" id="edit-nickname" class="form-input" value="${member.nickname}"></div>
-        <div><label class="form-label">Species</label><input type="text" class="form-input bg-card" value="${member.species}" disabled></div>
+        <div><label class="form-label">Species</label><input type="text" class="form-input text-secondary" value="${member.species}" disabled></div>
         <div><label class="form-label">Gender</label><select id="edit-gender" class="form-input">${genderOptions}</select></div>
         <div><label class="form-label">Level</label><input type="number" id="edit-level" min="1" max="100" class="form-input" value="${member.level}"></div>
         <div><label class="form-label">Held Item</label><select id="edit-item" class="form-input">${itemOptions}</select></div>
@@ -365,10 +356,10 @@ function renderPokemonEditor() {
         <div>
             <h4 class="font-semibold mb-2 text-heading">Moves</h4>
             <div class="space-y-2">
-                ${moveSelectHTML(1, member.moves[0])}
-                ${moveSelectHTML(2, member.moves[1])}
-                ${moveSelectHTML(3, member.moves[2])}
-                ${moveSelectHTML(4, member.moves[3])}
+                ${moveOptionsHTML(1, member.moves[0])}
+                ${moveOptionsHTML(2, member.moves[1])}
+                ${moveOptionsHTML(3, member.moves[2])}
+                ${moveOptionsHTML(4, member.moves[3])}
             </div>
         </div>
     </div>`;
@@ -384,11 +375,9 @@ function renderPokemonEditor() {
 
 // --- INITIALIZATION & EVENT LISTENERS ---
 function setupEventListeners() {
-    const mainContent = document.getElementById('main-content');
     const modal = document.getElementById('pokemon-editor-modal');
 
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-
     document.body.addEventListener('click', e => {
         const navBtn = e.target.closest('.nav-btn');
         if (navBtn) {
@@ -431,14 +420,14 @@ function setupEventListeners() {
             modal.querySelector(`#${modalTab.dataset.tab}-tab`).classList.add('active');
         }
     });
-
-    mainContent.addEventListener('change', e => {
+    
+    document.body.addEventListener('change', e => {
         if (e.target.type === 'checkbox') {
             updateCheckboxState(e.target.dataset.category, e.target.dataset.name, e.target.checked);
         }
     });
     
-    mainContent.addEventListener('input', e => {
+    document.body.addEventListener('input', e => {
         const targetId = e.target.id;
         if (targetId === 'pokedex-search') renderPokedex();
         else if (targetId === 'box-search') renderTeamBuilder();
