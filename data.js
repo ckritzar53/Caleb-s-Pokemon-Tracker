@@ -1,16 +1,14 @@
 const TYPE_COLORS = {
-    Normal: "bg-gray-200 text-gray-800", Fire: "bg-orange-200 text-orange-800", Water: "bg-blue-200 text-blue-800",
-    Grass: "bg-green-200 text-green-800", Electric: "bg-yellow-200 text-yellow-800", Ice: "bg-cyan-200 text-cyan-800",
-    Fighting: "bg-red-200 text-red-800", Poison: "bg-purple-200 text-purple-800", Ground: "bg-amber-200 text-amber-800",
-    Flying: "bg-indigo-200 text-indigo-800", Psychic: "bg-pink-200 text-pink-800", Bug: "bg-lime-200 text-lime-800",
-    Rock: "bg-stone-200 text-stone-800", Ghost: "bg-violet-200 text-violet-800", Dragon: "bg-teal-200 text-teal-800",
-    Dark: "bg-slate-300 text-slate-800", Steel: "bg-zinc-300 text-zinc-800", Fairy: "bg-fuchsia-200 text-fuchsia-800",
+    Normal: "bg-gray-400 text-gray-900", Fire: "bg-orange-500 text-white", Water: "bg-blue-500 text-white",
+    Grass: "bg-green-500 text-white", Electric: "bg-yellow-400 text-gray-900", Ice: "bg-cyan-300 text-gray-900",
+    Fighting: "bg-red-600 text-white", Poison: "bg-purple-500 text-white", Ground: "bg-amber-600 text-white",
+    Flying: "bg-indigo-400 text-white", Psychic: "bg-pink-500 text-white", Bug: "bg-lime-500 text-white",
+    Rock: "bg-stone-500 text-white", Ghost: "bg-violet-600 text-white", Dragon: "bg-teal-500 text-white",
+    Dark: "bg-slate-600 text-white", Steel: "bg-zinc-400 text-gray-900", Fairy: "bg-fuchsia-400 text-white",
 };
 
 const DATA = {
     pokedex: [
-        // Each Pokémon now has an evolution chain property.
-        // `base: true` marks the first in a line for the smart box filter.
         { id: 1, name: "Sprigatito", types: ["Grass"], base: true, evolutions: [{ to: "Floragato", at: 16 }] }, 
         { id: 2, name: "Floragato", types: ["Grass"], evolutions: [{ to: "Meowscarada", at: 36 }] }, 
         { id: 3, name: "Meowscarada", types: ["Grass", "Dark"], evolutions: [] },
@@ -31,19 +29,14 @@ const DATA = {
         { name: "Medali Gym", leader: "Larry", type: "Normal" }, { name: "Montenevera Gym", leader: "Ryme", type: "Ghost" },
         { name: "Alfornada Gym", leader: "Tulip", type: "Psychic" }, { name: "Glaseado Gym", leader: "Grusha", type: "Ice" },
     ],
-    tms: [ { id: 1, name: "Take Down" }, { id: 2, name: "Charm" }, { id: 3, name: "Fake Tears" } ],
-    items: [ // Expanded for held items
-        "Ability Shield", "Amulet Coin", "Auspicious Armor", "Big Root", "Black Belt", "Black Sludge",
-        "Black Glasses", "Bright Powder", "Charcoal", "Choice Band", "Choice Scarf", "Choice Specs",
-        "Covert Cloak", "Eviolite", "Expert Belt", "Focus Sash", "King's Rock", "Leftovers", "Life Orb",
-        "Light Clay", "Magnet", "Mental Herb", "Metal Coat", "Metronome", "Miracle Seed", "Mystic Water",
-        "Never-Melt Ice", "Power Herb", "Quick Claw", "Rocky Helmet", "Scope Lens", "Sharp Beak",
-        "Shell Bell", "Silk Scarf", "Silver Powder", "Soft Sand", "Spell Tag", "Twisted Spoon", "White Herb"
+    tms: [ { id: 1, name: "Take Down" }, { id: 2, name: "Charm" }, { id: 3, name: "Fake Tears" }, { id: 4, name: "Agility" }, { id: 5, name: "Mud-Slap" }],
+    items: [
+        "Ability Shield", "Amulet Coin", "Auspicious Armor", "Big Root", "Black Belt", "Black Sludge", "Choice Band", 
+        "Choice Scarf", "Choice Specs", "Eviolite", "Expert Belt", "Focus Sash", "Leftovers", "Life Orb", "Rocky Helmet", "Scope Lens"
     ],
-    moves: [ // Sample move list for dropdowns
-        "Tackle", "Growl", "Scratch", "Ember", "Water Gun", "Vine Whip", "Thunder Shock", "Quick Attack",
-        "Hyper Beam", "Solar Beam", "Flamethrower", "Hydro Pump", "Thunderbolt", "Ice Beam", "Psychic",
-        "Shadow Ball", "Earthquake", "Rock Slide", "Dragon Claw", "Swords Dance", "Calm Mind", "Protect"
+    moves: [
+        "Tackle", "Growl", "Scratch", "Ember", "Water Gun", "Vine Whip", "Thunder Shock", "Quick Attack", "Hyper Beam", "Solar Beam", 
+        "Flamethrower", "Hydro Pump", "Thunderbolt", "Ice Beam", "Psychic", "Shadow Ball", "Earthquake", "Rock Slide", "Dragon Claw", "Swords Dance"
     ]
 };
 
