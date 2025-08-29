@@ -82,7 +82,7 @@ function updatePokedexStatus(pokemonName, clickedStatus) {
         delete appState.pokedex[pokemonName];
     }
     
-    saveState();
+    saveState(); // CRITICAL FIX: Ensure state is saved after every update.
     renderPokedex();
     renderDashboard();
     renderTeamBuilder();
