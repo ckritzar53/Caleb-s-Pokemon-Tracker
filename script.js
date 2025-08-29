@@ -2,7 +2,7 @@
 let appState = {};
 let currentEditingIndex = null;
 
-function createDefaultTeamMember(species) {
+const createDefaultTeamMember = (species) => {
     const speciesData = DATA.pokedex.find(p => p.name === species);
     return {
         species, nickname: species, level: 5, 
@@ -13,7 +13,7 @@ function createDefaultTeamMember(species) {
         ivs: { hp: 31, atk: 31, def: 31, spatk: 31, spdef: 31, speed: 31 },
         moves: ['', '', '', ''], memories: '',
     };
-}
+};
 
 function loadState() {
     try {
@@ -549,7 +549,6 @@ function renderView(viewId) {
         renderMap[viewId]();
     }
 }
-
 
 function initializeApp() {
     loadState();
