@@ -21,7 +21,6 @@ function loadState() {
         const initialState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [] };
         appState = savedState ? JSON.parse(savedState) : initialState;
         
-        // Ensure all parts of the state are correctly initialized
         if (!appState.team || !Array.isArray(appState.team) || appState.team.length !== 6) {
             appState.team = Array(6).fill(null);
         }
