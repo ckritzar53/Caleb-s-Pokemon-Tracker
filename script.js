@@ -73,16 +73,14 @@ function toggleTheme() {
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
     const currentStatus = appState.pokedex[pokemonName];
-    // If the current status is the same as the clicked one, toggle it off (set to null).
-    // Otherwise, set it to the new status.
     appState.pokedex[pokemonName] = currentStatus === clickedStatus ? null : clickedStatus;
     
-    // If the status is null, remove the key from the object for cleaner data.
     if (appState.pokedex[pokemonName] === null) {
         delete appState.pokedex[pokemonName];
     }
     
-    saveState(); // CRITICAL FIX: Ensure state is saved after every update.
+    saveState(); // CRITICAL FIX: Ensures state is saved to localStorage after every update.
+    
     renderPokedex();
     renderDashboard();
     renderTeamBuilder();
