@@ -18,6 +18,7 @@
             </button>
         </header>
 
+        <!-- Navigation -->
         <nav class="mb-6 sm:mb-8 overflow-x-auto pb-2">
             <div class="flex space-x-2 justify-start sm:justify-center bg-secondary p-1.5 rounded-xl shadow-sm">
                 <button data-view="dashboard" class="nav-btn active">Dashboard</button>
@@ -31,6 +32,7 @@
         </nav>
 
         <main>
+            <!-- Views will be dynamically populated here -->
             <div id="dashboard-view" class="view active"></div>
             <div id="pokedex-view" class="view"></div>
             <div id="team-builder-view" class="view"></div>
@@ -41,6 +43,7 @@
         </main>
     </div>
 
+    <!-- Pokémon Editor Modal -->
     <div id="pokemon-editor-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <div class="flex justify-between items-center p-4 border-b border-border">
@@ -64,6 +67,7 @@
         </div>
     </div>
     
+    <!-- Pokedex Detail Modal -->
     <div id="pokedex-detail-modal" class="modal-overlay hidden">
         <div class="modal-content">
              <div class="flex justify-between items-center p-4 border-b border-border">
@@ -71,7 +75,8 @@
                 <button id="detail-modal-close-btn" class="text-3xl text-secondary hover:text-heading">&times;</button>
             </div>
             <div id="detail-modal-body" class="p-4 flex-grow overflow-y-auto">
-                </div>
+                <!-- Content will be injected here -->
+            </div>
         </div>
     </div>
 
@@ -79,3 +84,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
