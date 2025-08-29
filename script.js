@@ -18,24 +18,26 @@ const createDefaultTeamMember = (species) => {
 function loadState() {
     try {
         const savedState = localStorage.getItem('pokemonTrackerState');
-        const initialState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [], sandwiches: [] };
+        const initialState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [] };
         appState = savedState ? JSON.parse(savedState) : initialState;
         
+        // Ensure all parts of the state are correctly initialized to prevent errors
         if (!appState.pokedex || typeof appState.pokedex !== 'object') appState.pokedex = {};
         if (!appState.team || !Array.isArray(appState.team)) appState.team = Array(6).fill(null);
-        CATEGORIES.forEach(cat => {
-            if (!appState[cat.id] || !Array.isArray(appState[cat.id])) appState[cat.id] = [];
-        });
+        if (!appState.gyms || !Array.isArray(appState.gyms)) appState.gyms = [];
+        if (!appState.tms || !Array.isArray(appState.tms)) appState.tms = [];
+        if (!appState.items || !Array.isArray(appState.items)) appState.items = [];
 
     } catch (e) {
         console.error("Could not load or parse state, resetting.", e);
-        appState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [], sandwiches: [] };
+        appState = { pokedex: {}, team: Array(6).fill(null), gyms: [], tms: [], items: [] };
     }
 }
 
 function saveState() {
     try {
         localStorage.setItem('pokemonTrackerState', JSON.stringify(appState));
+        // console.log("State saved successfully:", appState); // For debugging
     } catch (e) {
         console.error("Failed to save state:", e);
     }
@@ -65,18 +67,27 @@ function toggleTheme() {
 
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
+    // console.log(`Updating ${pokemonName}. Clicked: ${clickedStatus}. Current: ${appState.pokedex[pokemonName]}`); // For debugging
     const currentStatus = appState.pokedex[pokemonName];
+    
+    // Logic: If you click the same status icon, it toggles off (becomes null). Otherwise, it sets the new status.
     const newStatus = currentStatus === clickedStatus ? null : clickedStatus;
+
     if (newStatus === null) {
         delete appState.pokedex[pokemonName];
     } else {
         appState.pokedex[pokemonName] = newStatus;
     }
-    saveState();
+    
+    // THIS IS THE CRITICAL FIX. IT SAVES THE STATE TO LOCALSTORAGE AFTER EVERY SINGLE CLICK.
+    saveState(); 
+    
+    // Re-render all affected components to show the change immediately.
     renderPokedex();
     renderDashboard();
     renderTeamBuilder();
 }
+
 
 function updateCheckboxState(category, itemName, isChecked) {
     const items = new Set(appState[category] || []);
@@ -154,30 +165,44 @@ function savePokemonDetails() {
     closeEditorModal();
 }
 
-function openPokedexDetailModal(pokemonName) {
-    const pokemon = DATA.pokedex.find(p => p.name === pokemonName);
-    if (!pokemon) return;
-
-    document.getElementById('detail-modal-title').textContent = `${pokemon.name} (#${String(pokemon.id).padStart(3, '0')})`;
-    const typesHtml = pokemon.types.map(type => `<span class="type-badge ${TYPE_COLORS[type]}">${type}</span>`).join(' ');
-    const locationsHtml = pokemon.locations.length > 0
-        ? `<ul>${pokemon.locations.map(loc => `<li class="text-primary ml-4 list-disc">${loc}</li>`).join('')}</ul>`
-        : '<p class="text-secondary">No specific locations found (e.g., evolution).</p>';
-
-    document.getElementById('detail-modal-body').innerHTML = `
-        <div class="flex items-center gap-4 mb-4">${typesHtml}</div>
-        <h4 class="font-semibold text-lg text-heading mb-2">Locations</h4>
-        ${locationsHtml}
-    `;
-    document.getElementById('pokedex-detail-modal').classList.remove('hidden');
+// --- RENDERING ---
+function renderView(viewId) {
+    const views = {
+        dashboard: renderDashboard,
+        pokedex: renderPokedex,
+        team_builder: renderTeamBuilder,
+        gyms: renderGyms,
+        tms: () => renderGenericList('tms', 'TMs'),
+        items: () => renderGenericList('items', 'Items')
+    };
+    views[viewId.replace(/-/g, '_')]();
 }
 
-function closePokedexDetailModal() {
-     document.getElementById('pokedex-detail-modal').classList.add('hidden');
-}
+const getPokemonInChain = (pokemonName) => {
+    let baseForm = DATA.pokedex.find(p => p.name === pokemonName);
+    if (!baseForm) return [];
+    
+    let isBase = false;
+    while (!isBase) {
+        const parent = DATA.pokedex.find(p => p.evolutions.some(e => e.to === baseForm.name));
+        if (parent) {
+            baseForm = parent;
+        } else {
+            isBase = true;
+        }
+    }
 
+    let chain = [baseForm];
+    let current = baseForm;
+    while(current.evolutions.length > 0) {
+        const next = DATA.pokedex.find(p => p.name === current.evolutions[0].to);
+        if(!next) break;
+        chain.push(next);
+        current = next;
+    }
+    return chain.map(p => p.name);
+};
 
-// --- RENDERING FUNCTIONS ---
 function renderDashboard() {
     const container = document.getElementById('dashboard-view');
     const pokedexProgress = POKEDEX_STATUSES.map(status => {
@@ -213,7 +238,7 @@ function renderPokedex() {
         const caughtClass = statusIndex >= 2 ? 'caught active' : 'caught';
         const typesHtml = p.types.map(type => `<span class="type-badge ${TYPE_COLORS[type]}">${type}</span>`).join(' ');
         
-        return `<div class="pokedex-item clickable" data-pokemon-name-detail="${p.name}">
+        return `<div class="pokedex-item">
             <div class="flex items-center justify-between">
                 <span class="text-primary font-medium">${String(p.id).padStart(3,'0')}. ${p.name}</span>
                 <div class="pokedex-status-icons" data-pokemon-name="${p.name}">
@@ -254,8 +279,6 @@ function renderTeamBuilder() {
     
     const boxItems = baseFormsToShow.filter(name => name.toLowerCase().includes(filter)).map(name => `<div class="box-pokemon" data-name="${name}"><span>${name}</span><i class="fas fa-plus text-secondary"></i></div>`).join('');
 
-    const analysisHtml = renderTypeAnalysis();
-
     container.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
             <h2 class="text-3xl font-bold text-heading mb-4">My Team</h2>
@@ -268,96 +291,8 @@ function renderTeamBuilder() {
                 <div class="max-h-80 overflow-y-auto space-y-2 p-2">${boxItems || `<p class="text-center text-secondary">Catch Pokémon to add them!</p>`}</div>
             </div>
         </div>
-        <div class="lg:col-span-3 mt-8">${analysisHtml}</div>
     </div>`;
 }
-
-function renderTypeAnalysis() {
-    const offensiveCoverage = {};
-    const defensiveWeaknesses = {};
-    const allTypes = Object.keys(TYPE_CHART);
-    allTypes.forEach(t => {
-        offensiveCoverage[t] = 0;
-        defensiveWeaknesses[t] = 0;
-    });
-
-    appState.team.forEach(member => {
-        if (member) {
-            const speciesData = DATA.pokedex.find(p => p.name === member.species);
-            const type1 = speciesData.types[0];
-            const type2 = speciesData.types[1];
-            allTypes.forEach(attackingType => {
-                let multiplier = 1;
-                if (TYPE_CHART[type1]?.weaknesses.includes(attackingType)) multiplier *= 2;
-                if (TYPE_CHART[type1]?.resistances.includes(attackingType)) multiplier *= 0.5;
-                if (TYPE_CHART[type1]?.immunities.includes(attackingType)) multiplier *= 0;
-                if (type2) {
-                     if (TYPE_CHART[type2]?.weaknesses.includes(attackingType)) multiplier *= 2;
-                     if (TYPE_CHART[type2]?.resistances.includes(attackingType)) multiplier *= 0.5;
-                     if (TYPE_CHART[type2]?.immunities.includes(attackingType)) multiplier *= 0;
-                }
-                if (multiplier > 1) {
-                    defensiveWeaknesses[attackingType]++;
-                }
-            });
-            member.moves.forEach(moveName => {
-                if (moveName) {
-                    const moveData = DATA.moves.find(m => m.name === moveName);
-                    if (moveData) {
-                        allTypes.forEach(defendingType => {
-                           if(TYPE_CHART[defendingType]?.weaknesses.includes(moveData.type)) {
-                               offensiveCoverage[defendingType]++;
-                           }
-                        });
-                    }
-                }
-            });
-        }
-    });
-    
-    const generateChart = (title, data) => {
-        const items = allTypes.map(type => {
-            const count = data[type];
-            const isDimmed = count === 0 ? 'dimmed' : '';
-            return `<div class="type-analysis-item ${isDimmed}">
-                <span class="type-badge ${TYPE_COLORS[type]}">${type}</span>
-                <span class="font-bold text-lg text-heading ml-2">${count}</span>
-            </div>`
-        }).join('');
-        return `<div class="card mb-6">
-            <h3 class="text-2xl font-bold text-heading mb-4">${title}</h3>
-            <div class="type-analysis-grid">${items}</div>
-        </div>`;
-    };
-    
-    return generateChart('Offensive Coverage (Super-Effective)', offensiveCoverage) + generateChart('Defensive Weaknesses', defensiveWeaknesses);
-}
-
-function getPokemonInChain(pokemonName) {
-    let baseForm = DATA.pokedex.find(p => p.name === pokemonName);
-    if (!baseForm) return [];
-    
-    let isBase = false;
-    while (!isBase) {
-        const parent = DATA.pokedex.find(p => p.evolutions.some(e => e.to === baseForm.name));
-        if (parent) {
-            baseForm = parent;
-        } else {
-            isBase = true;
-        }
-    }
-
-    let chain = [baseForm];
-    let current = baseForm;
-    while(current.evolutions.length > 0) {
-        const next = DATA.pokedex.find(p => p.name === current.evolutions[0].to);
-        if(!next) break;
-        chain.push(next);
-        current = next;
-    }
-    return chain.map(p => p.name);
-};
-
 
 function renderGenericList(category, title) {
     const id = category.toLowerCase();
@@ -533,6 +468,23 @@ function setupEventListeners() {
         else if (targetId === 'sandwiches-search') renderGenericList('sandwiches', 'Sandwiches');
     });
 }
+
+function renderView(viewId) {
+    const renderMap = {
+        'dashboard': renderDashboard,
+        'pokedex': renderPokedex,
+        'team-builder': renderTeamBuilder,
+        'gyms': renderGyms,
+        'tms': () => renderGenericList('tms', 'TMs'),
+        'items': () => renderGenericList('items', 'Items'),
+        'sandwiches': () => renderGenericList('sandwiches', 'Sandwiches')
+    };
+
+    if (renderMap[viewId]) {
+        renderMap[viewId]();
+    }
+}
+
 
 function initializeApp() {
     loadState();
