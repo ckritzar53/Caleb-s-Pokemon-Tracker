@@ -85,3 +85,4 @@ const DATA = {
         // (This would be filled with all 151 recipes)
     ]
 };
+
