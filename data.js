@@ -50,17 +50,17 @@ const TYPE_CHART = {
 
 const DATA = {
     pokedex: [
-        { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'] },
-        { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'] },
-        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'] },
-        { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'] },
-        { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'] },
-        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'] },
-        { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'] },
-        { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'] },
-        { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'] },
-        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'] },
-        // (This would be filled with all 400 Pokémon)
+        { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokmon'], caught: false },
+        { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'], caught: false },
+        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'], caught: false },
+        { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokmon'], caught: false },
+        { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'], caught: false },
+        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'], caught: false },
+        { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokmon'], caught: false },
+        { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'], caught: false },
+        { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'], caught: false },
+        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'], caught: false },
+        // (This would be filled with all 400 Pokmon)
     ],
     gyms: [
         { name: 'Cortondo Gym', leader: 'Katy', type: 'Bug' }, { name: 'Artazon Gym', leader: 'Brassius', type: 'Grass' },
