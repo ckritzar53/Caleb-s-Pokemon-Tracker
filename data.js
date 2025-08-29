@@ -52,14 +52,14 @@ const DATA = {
     pokedex: [
         { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'] },
         { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'] },
-        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'] },
+        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'], availability: { time: ['night'] } },
         { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'] },
         { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'] },
-        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'] },
+        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'], availability: { time: ['night'] } },
         { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'] },
         { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'] },
         { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'] },
-        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'] },
+        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'], availability: { time: ['day'] } },
         // (This would be filled with all 400 Pokémon)
     ],
     gyms: [
@@ -85,4 +85,3 @@ const DATA = {
         // (This would be filled with all 151 recipes)
     ]
 };
-
