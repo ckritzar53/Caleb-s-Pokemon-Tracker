@@ -10,14 +10,14 @@ const DATA = {
         // This is a sample. To add all 400, continue the pattern.
     ],
     gyms: [
-        { name: "Cortondo Gym", leader: "Katy", type: "Bug", typeColor: "bg-lime-500" },
-        { name: "Artazon Gym", leader: "Brassius", type: "Grass", typeColor: "bg-green-500" },
-        { name: "Levincia Gym", leader: "Iono", type: "Electric", typeColor: "bg-yellow-400" },
-        { name: "Cascarrafa Gym", leader: "Kofu", type: "Water", typeColor: "bg-blue-500" },
-        { name: "Medali Gym", leader: "Larry", type: "Normal", typeColor: "bg-gray-400" },
-        { name: "Montenevera Gym", leader: "Ryme", type: "Ghost", typeColor: "bg-indigo-400" },
-        { name: "Alfornada Gym", leader: "Tulip", type: "Psychic", typeColor: "bg-pink-500" },
-        { name: "Glaseado Gym", leader: "Grusha", type: "Ice", typeColor: "bg-cyan-300" },
+        { name: "Cortondo Gym", leader: "Katy", type: "Bug", color: "bg-lime-200 text-lime-800" },
+        { name: "Artazon Gym", leader: "Brassius", type: "Grass", color: "bg-green-200 text-green-800" },
+        { name: "Levincia Gym", leader: "Iono", type: "Electric", color: "bg-yellow-200 text-yellow-800" },
+        { name: "Cascarrafa Gym", leader: "Kofu", type: "Water", color: "bg-blue-200 text-blue-800" },
+        { name: "Medali Gym", leader: "Larry", type: "Normal", color: "bg-gray-200 text-gray-800" },
+        { name: "Montenevera Gym", leader: "Ryme", type: "Ghost", color: "bg-indigo-200 text-indigo-800" },
+        { name: "Alfornada Gym", leader: "Tulip", type: "Psychic", color: "bg-pink-200 text-pink-800" },
+        { name: "Glaseado Gym", leader: "Grusha", type: "Ice", color: "bg-cyan-200 text-cyan-800" },
     ],
     tms: [
         { id: 1, name: "Take Down" }, { id: 2, name: "Charm" }, { id: 3, name: "Fake Tears" },
