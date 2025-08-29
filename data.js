@@ -48,7 +48,6 @@ const TYPE_CHART = {
     Fairy: { weaknesses: ['Poison', 'Steel'], resistances: ['Fighting', 'Bug', 'Dark'], immunities: ['Dragon'] },
 };
 
-// --- NEW: Nature Data ---
 const NATURES = [
     { name: 'Hardy', increased: null, decreased: null },
     { name: 'Lonely', increased: 'atk', decreased: 'def' },
@@ -75,23 +74,22 @@ const NATURES = [
     { name: 'Bashful', increased: null, decreased: null },
     { name: 'Serious', increased: null, decreased: null },
     { name: 'Docile', increased: null, decreased: null },
-    { name: 'Rash', increased: 'spatk', decreased: 'spdef' }, // Duplicate, remove one if needed
 ];
-
 
 const DATA = {
     pokedex: [
-        { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'], baseStats: { hp: 40, atk: 61, def: 54, spatk: 45, spdef: 45, speed: 65 } }, // Added baseStats
-        { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'], baseStats: { hp: 61, atk: 80, def: 63, spatk: 63, spdef: 63, speed: 83 } }, // Added baseStats
-        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'], baseStats: { hp: 76, atk: 110, def: 70, spatk: 81, spdef: 70, speed: 123 } }, // Added baseStats
-        { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'], baseStats: { hp: 67, atk: 45, def: 59, spatk: 63, spdef: 40, speed: 36 } }, // Added baseStats
-        { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'], baseStats: { hp: 81, atk: 55, def: 78, spatk: 90, spdef: 58, speed: 49 } }, // Added baseStats
-        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'], baseStats: { hp: 104, atk: 75, def: 100, spatk: 110, spdef: 75, speed: 66 } }, // Added baseStats
-        { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'], baseStats: { hp: 55, atk: 65, def: 45, spatk: 50, spdef: 45, speed: 50 } }, // Added baseStats
-        { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'], baseStats: { hp: 70, atk: 85, def: 65, spatk: 65, spdef: 60, speed: 85 } }, // Added baseStats
-        { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'], baseStats: { hp: 85, atk: 120, def: 80, spatk: 85, spdef: 75, speed: 85 } }, // Added baseStats
-        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'], baseStats: { hp: 54, atk: 45, def: 40, spatk: 35, spdef: 45, speed: 35 } }, // Added baseStats
-        // (This would be filled with all 400 Pokémon)
+        { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)'], baseStats: { hp: 40, atk: 61, def: 54, spatk: 45, spdef: 45, speed: 65 }, abilities: ['Overgrow', 'Protean'] },
+        { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'], baseStats: { hp: 61, atk: 80, def: 63, spatk: 63, spdef: 63, speed: 83 }, abilities: ['Overgrow', 'Protean'] },
+        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'], baseStats: { hp: 76, atk: 110, def: 70, spatk: 81, spdef: 70, speed: 123 }, abilities: ['Overgrow', 'Protean'] },
+        { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)'], baseStats: { hp: 67, atk: 45, def: 59, spatk: 63, spdef: 40, speed: 36 }, abilities: ['Blaze', 'Unaware'] },
+        { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'], baseStats: { hp: 81, atk: 55, def: 78, spatk: 90, spdef: 58, speed: 49 }, abilities: ['Blaze', 'Unaware'] },
+        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'], baseStats: { hp: 104, atk: 75, def: 100, spatk: 110, spdef: 75, speed: 66 }, abilities: ['Blaze', 'Unaware'] },
+        { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)'], baseStats: { hp: 55, atk: 65, def: 45, spatk: 50, spdef: 45, speed: 50 }, abilities: ['Torrent', 'Moxie'] },
+        { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'], baseStats: { hp: 70, atk: 85, def: 65, spatk: 65, spdef: 60, speed: 85 }, abilities: ['Torrent', 'Moxie'] },
+        { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'], baseStats: { hp: 85, atk: 120, def: 80, spatk: 85, spdef: 75, speed: 85 }, abilities: ['Torrent', 'Moxie'] },
+        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'], baseStats: { hp: 54, atk: 45, def: 40, spatk: 35, spdef: 45, speed: 35 }, abilities: ['Aroma Veil', 'Gluttony', 'Thick Fat'] },
+        { id: 11, name: 'Oinkologne', types: ['Normal'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Lechonk'], baseStats: { hp: 110, atk: 100, def: 75, spatk: 59, spdef: 80, speed: 65 }, abilities: ['Aroma Veil', 'Gluttony', 'Thick Fat'] },
+        // Add more Pokémon with baseStats and abilities as needed for a full Pokedex
     ],
     gyms: [
         { name: 'Cortondo Gym', leader: 'Katy', type: 'Bug' }, { name: 'Artazon Gym', leader: 'Brassius', type: 'Grass' },
@@ -108,12 +106,47 @@ const DATA = {
         // (This would be a comprehensive item list)
     ],
     moves: [
-        { name: "Pound", type: "Normal" }, { name: "Karate Chop", type: "Fighting" }, { name: "Double Slap", type: "Normal" }, { name: "Comet Punch", type: "Normal" }, { name: "Mega Punch", type: "Normal" }, { name: "Pay Day", type: "Normal" }, { name: "Fire Punch", type: "Fire" }, { name: "Ice Punch", type: "Ice" }, { name: "Thunder Punch", type: "Electric" }, { name: "Scratch", type: "Normal" }, { name: "Vise Grip", type: "Normal" }, { name: "Guillotine", type: "Normal" }, { name: "Razor Wind", type: "Normal" }, { name: "Swords Dance", type: "Normal" }, { name: "Cut", type: "Normal" },
-        // (This would be a comprehensive move list)
+        { name: "Pound", type: "Normal", power: 40, accuracy: 100 },
+        { name: "Karate Chop", type: "Fighting", power: 50, accuracy: 100 },
+        { name: "Double Slap", type: "Normal", power: 15, accuracy: 85 },
+        { name: "Comet Punch", type: "Normal", power: 18, accuracy: 85 },
+        { name: "Mega Punch", type: "Normal", power: 80, accuracy: 85 },
+        { name: "Pay Day", type: "Normal", power: 40, accuracy: 100 },
+        { name: "Fire Punch", type: "Fire", power: 75, accuracy: 100 },
+        { name: "Ice Punch", type: "Ice", power: 75, accuracy: 100 },
+        { name: "Thunder Punch", type: "Electric", power: 75, accuracy: 100 },
+        { name: "Scratch", type: "Normal", power: 40, accuracy: 100 },
+        { name: "Vise Grip", type: "Normal", power: 55, accuracy: 100 },
+        { name: "Guillotine", type: "Normal", power: 'OHKO', accuracy: 30 }, // OHKO for One-Hit KO
+        { name: "Razor Wind", type: "Normal", power: 80, accuracy: 100 },
+        { name: "Swords Dance", type: "Normal", power: '-', accuracy: '-' }, // Status move
+        { name: "Cut", type: "Normal", power: 50, accuracy: 95 },
+        // (This would be a comprehensive move list with power and accuracy)
     ],
     sandwiches: [
         { name: "Jambon-Beurre" }, { name: "Classic Bocadillo" }, { name: "Marmalade Sandwich" }, { name: "Tropical Sandwich" }, { name: "Avocado Sandwich" }, { name: "Zesty Sandwich" },
         // (This would be filled with all 151 recipes)
+    ],
+    abilities: [ // Comprehensive list of abilities for dropdowns
+        "Adaptability", "Aerilate", "Analytic", "Anticipation", "Aroma Veil", "As One (Glastrier)", "As One (Spectrier)",
+        "Blaze", "Chlorophyll", "Clear Body", "Cloud Nine", "Competitive", "Compound Eyes", "Contrary",
+        "Defeatist", "Defiant", "Download", "Dragon's Maw", "Drizzle", "Drought", "Dry Skin",
+        "Electric Surge", "Filter", "Fire Punch", "Flash Fire", "Flower Gift", "Forecast", "Forewarn",
+        "Frisk", "Gluttony", "Gorilla Tactics", "Grassy Surge", "Guts", "Hardy", "Hasty", "Heatproof",
+        "Heavy Metal", "Ice Punch", "Illusion", "Immunity", "Imposter", "Impish", "Inner Focus", "Insomnia",
+        "Intimidate", "Jolly", "Justified", "Karate Chop", "Lax", "Lechonk", "Levitate", "Libero",
+        "Light Metal", "Lightning Rod", "Lonely", "Magic Bounce", "Magic Guard", "Marvel Scale", "Meowscarada",
+        "Mild", "Modest", "Mold Breaker", "Motor Drive", "Moxie", "Mud-Slap", "Multiscale", "Mummy",
+        "Naive", "Natural Cure", "Naughty", "Neutralizing Gas", "Normal", "Oblivious", "Oinkologne", "Overgrow",
+        "Pay Day", "Poison Point", "Pound", "Prankster", "Pressure", "Protean", "Psychic Surge", "Quaxly",
+        "Quaxwell", "Quaquaval", "Quiet", "Quirky", "Rash", "Rattled", "Razor Wind", "Regenerator",
+        "Relaxed", "Refrigerate", "Rough Skin", "Sand Stream", "Sand Veil", "Sap Sipper", "Sassy", "Scratch",
+        "Scrappy", "Serene Grace", "Serious", "Sheer Force", "Simple", "Skeledirge", "Slow Start", "Snow Cloak",
+        "Snow Warning", "Solid Rock", "Soundproof", "Speed Boost", "Sprigatito", "Static", "Steely Spirit",
+        "Sticky Hold", "Storm Drain", "Strong Jaw", "Sturdy", "Suction Cups", "Super Luck", "Swift Swim",
+        "Swords Dance", "Synchronize", "Take Down", "Technician", "Teravolt", "Thick Fat", "Thunder Punch",
+        "Timid", "Torrent", "Trace", "Transistor", "Truant", "Turboblaze", "Unaware", "Unburden",
+        "Vital Spirit", "Vise Grip", "Volt Absorb", "Water Absorb", "Water Veil", "Weak Armor", "Zen Mode",
+        // Add more abilities as needed
     ]
 };
-
