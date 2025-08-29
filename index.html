@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Tracker - Apple Theme</title>
+    <title>Pokémon Tracker - Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
@@ -14,11 +14,11 @@
     <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-10">
             <div class="inline-block p-4 bg-gray-200 rounded-full mb-4 border-4 border-white shadow-sm">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                 <svg xmlns="http://www.w.org/2000/svg" class="h-10 w-10 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 6a2 2 0 114 0 2 2 0 01-4 0zM8 9a2 2 0 100 4h4a2 2 0 100-4H8z" />
                 </svg>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900">Pokémon Tracker</h1>
+            <h1 class="text-4xl font-bold text-gray-900">Pokémon Tracker Pro</h1>
             <p class="text-lg text-gray-500 mt-2">Scarlet & Violet Completionist Checklist</p>
         </header>
 
@@ -35,71 +35,84 @@
         </nav>
 
         <main>
-            <!-- Dashboard View -->
-            <div id="dashboard-view" class="view active">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="dashboard-grid">
-                    <!-- Progress cards will be injected here -->
-                </div>
-            </div>
+            <!-- Views are injected here -->
+            <div id="dashboard-view" class="view active">...</div>
+            <div id="pokedex-view" class="view">...</div>
+            <div id="team-builder-view" class="view">...</div>
+            <div id="gyms-view" class="view">...</div>
+            <div id="tms-view" class="view">...</div>
+            <div id="items-view" class="view">...</div>
+        </main>
+    </div>
 
-            <!-- Pokedex View -->
-            <div id="pokedex-view" class="view">
-                <div class="bg-white p-4 rounded-xl shadow-sm">
-                    <input type="text" id="pokedex-search" placeholder="Search Pokémon..." class="w-full bg-gray-100 text-gray-800 p-3 rounded-lg mb-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="pokedex-grid">
-                        <!-- Pokedex items will be injected here -->
-                    </div>
-                </div>
+    <!-- Pokémon Editor Modal -->
+    <div id="pokemon-editor-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div id="modal-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-xl font-bold">Edit Pokémon</h2>
+                <button id="modal-close-btn" class="text-gray-400 hover:text-gray-600">&times;</button>
             </div>
-            
-            <!-- Team Builder View -->
-            <div id="team-builder-view" class="view">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4">My Team</h2>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="team-slots-grid">
-                            <!-- Team slots will be injected here -->
+            <div class="p-4">
+                <!-- Modal Tabs -->
+                <div class="border-b border-gray-200 mb-4">
+                    <nav class="-mb-px flex space-x-6" id="modal-tabs">
+                        <button class="modal-tab active" data-tab="summary">Summary</button>
+                        <button class="modal-tab" data-tab="stats">Stats & Moves</button>
+                        <button class="modal-tab" data-tab="memories">Memories</button>
+                    </nav>
+                </div>
+                <!-- Modal Tab Content -->
+                <div id="modal-tab-content">
+                    <!-- Summary Tab -->
+                    <div class="modal-tab-pane active" id="summary-tab">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="form-label">Nickname</label><input type="text" id="edit-nickname" class="form-input"></div>
+                            <div><label class="form-label">Species</label><input type="text" id="edit-species" class="form-input" disabled></div>
+                            <div><label class="form-label">Gender</label><select id="edit-gender" class="form-input"><option>Male</option><option>Female</option><option>Genderless</option></select></div>
+                            <div><label class="form-label">Level</label><input type="number" id="edit-level" min="1" max="100" class="form-input"></div>
+                            <div><label class="form-label">Held Item</label><select id="edit-item" class="form-input"></select></div>
+                            <div><label class="form-label">Ability</label><input type="text" id="edit-ability" class="form-input"></div>
+                            <div><label class="form-label">Nature</label><input type="text" id="edit-nature" class="form-input"></div>
+                            <div><label class="form-label">Met Location</label><input type="text" id="edit-met-location" class="form-input"></div>
                         </div>
                     </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Pokémon Box</h2>
-                        <div class="bg-white p-4 rounded-xl shadow-sm max-h-96 overflow-y-auto" id="pokemon-box-container">
-                             <input type="text" id="box-search" placeholder="Search caught Pokémon..." class="w-full bg-gray-100 text-gray-800 p-3 rounded-lg mb-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <div class="grid grid-cols-2 gap-2" id="pokemon-box-grid">
-                                <!-- Caught Pokemon will be listed here -->
+                    <!-- Stats & Moves Tab -->
+                    <div class="modal-tab-pane" id="stats-tab">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold mb-2">Stats</h4>
+                                <div class="grid grid-cols-4 gap-2 text-sm items-center">
+                                    <span></span><span class="font-medium">Base</span><span class="font-medium">EVs</span><span class="font-medium">IVs</span>
+                                    <label>HP</label><input type="number" id="edit-stat-hp" class="form-input-sm"><input type="number" id="edit-ev-hp" class="form-input-sm"><input type="number" id="edit-iv-hp" class="form-input-sm">
+                                    <label>Attack</label><input type="number" id="edit-stat-atk" class="form-input-sm"><input type="number" id="edit-ev-atk" class="form-input-sm"><input type="number" id="edit-iv-atk" class="form-input-sm">
+                                    <label>Defense</label><input type="number" id="edit-stat-def" class="form-input-sm"><input type="number" id="edit-ev-def" class="form-input-sm"><input type="number" id="edit-iv-def" class="form-input-sm">
+                                    <label>Sp. Atk</label><input type="number" id="edit-stat-spatk" class="form-input-sm"><input type="number" id="edit-ev-spatk" class="form-input-sm"><input type="number" id="edit-iv-spatk" class="form-input-sm">
+                                    <label>Sp. Def</label><input type="number" id="edit-stat-spdef" class="form-input-sm"><input type="number" id="edit-ev-spdef" class="form-input-sm"><input type="number" id="edit-iv-spdef" class="form-input-sm">
+                                    <label>Speed</label><input type="number" id="edit-stat-speed" class="form-input-sm"><input type="number" id="edit-ev-speed" class="form-input-sm"><input type="number" id="edit-iv-speed" class="form-input-sm">
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Moves</h4>
+                                <div class="space-y-2">
+                                    <select class="form-input" id="edit-move-1"></select>
+                                    <select class="form-input" id="edit-move-2"></select>
+                                    <select class="form-input" id="edit-move-3"></select>
+                                    <select class="form-input" id="edit-move-4"></select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Other Views -->
-            <div id="gyms-view" class="view">
-                 <div class="bg-white p-4 rounded-xl shadow-sm">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="gyms-grid">
-                        <!-- Gym items will be injected here -->
+                    <!-- Memories Tab -->
+                    <div class="modal-tab-pane" id="memories-tab">
+                        <label class="form-label">Write down your memories with this Pokémon!</label>
+                        <textarea id="edit-memories" class="form-input" rows="6"></textarea>
                     </div>
                 </div>
             </div>
-            
-            <div id="tms-view" class="view">
-                 <div class="bg-white p-4 rounded-xl shadow-sm">
-                     <input type="text" id="tms-search" placeholder="Search TMs..." class="w-full bg-gray-100 text-gray-800 p-3 rounded-lg mb-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="tms-grid">
-                        <!-- TM items will be injected here -->
-                    </div>
-                </div>
+            <div id="modal-footer" class="p-4 border-t border-gray-200 text-right">
+                <button id="modal-save-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600">Save Changes</button>
             </div>
-
-            <div id="items-view" class="view">
-                 <div class="bg-white p-4 rounded-xl shadow-sm">
-                     <input type="text" id="items-search" placeholder="Search Items..." class="w-full bg-gray-100 text-gray-800 p-3 rounded-lg mb-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="items-grid">
-                        <!-- Item items will be injected here -->
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
     <script src="data.js"></script>
