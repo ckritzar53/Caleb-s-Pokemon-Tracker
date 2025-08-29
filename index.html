@@ -24,9 +24,10 @@
 
         <!-- Navigation -->
         <nav class="mb-8 flex justify-center bg-gray-200/80 backdrop-blur-sm p-1 rounded-xl">
-            <div class="flex space-x-1">
+            <div class="flex flex-wrap space-x-1 justify-center">
                 <button data-view="dashboard" class="nav-btn active">Dashboard</button>
                 <button data-view="pokedex" class="nav-btn">Pokédex</button>
+                <button data-view="team-builder" class="nav-btn">Team Builder</button>
                 <button data-view="gyms" class="nav-btn">Gyms</button>
                 <button data-view="tms" class="nav-btn">TMs</button>
                 <button data-view="items" class="nav-btn">Items</button>
@@ -45,8 +46,29 @@
             <div id="pokedex-view" class="view">
                 <div class="bg-white p-4 rounded-xl shadow-sm">
                     <input type="text" id="pokedex-search" placeholder="Search Pokémon..." class="w-full bg-gray-100 text-gray-800 p-3 rounded-lg mb-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="pokedex-grid">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="pokedex-grid">
                         <!-- Pokedex items will be injected here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Builder View -->
+            <div id="team-builder-view" class="view">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">My Team</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="team-slots-grid">
+                            <!-- Team slots will be injected here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Pokémon Box</h2>
+                        <div class="bg-white p-4 rounded-xl shadow-sm max-h-96 overflow-y-auto" id="pokemon-box-container">
+                             <input type="text" id="box-search" placeholder="Search caught Pokémon..." class="w-full bg-gray-100 text-gray-800 p-3 rounded-lg mb-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <div class="grid grid-cols-2 gap-2" id="pokemon-box-grid">
+                                <!-- Caught Pokemon will be listed here -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
