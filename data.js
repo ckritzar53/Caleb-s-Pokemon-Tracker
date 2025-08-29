@@ -48,19 +48,50 @@ const TYPE_CHART = {
     Fairy: { weaknesses: ['Poison', 'Steel'], resistances: ['Fighting', 'Bug', 'Dark'], immunities: ['Dragon'] },
 };
 
+// --- NEW: Nature Data ---
+const NATURES = [
+    { name: 'Hardy', increased: null, decreased: null },
+    { name: 'Lonely', increased: 'atk', decreased: 'def' },
+    { name: 'Brave', increased: 'atk', decreased: 'speed' },
+    { name: 'Adamant', increased: 'atk', decreased: 'spatk' },
+    { name: 'Naughty', increased: 'atk', decreased: 'spdef' },
+    { name: 'Bold', increased: 'def', decreased: 'atk' },
+    { name: 'Relaxed', increased: 'def', decreased: 'speed' },
+    { name: 'Impish', increased: 'def', decreased: 'spatk' },
+    { name: 'Lax', increased: 'def', decreased: 'spdef' },
+    { name: 'Timid', increased: 'speed', decreased: 'atk' },
+    { name: 'Hasty', increased: 'speed', decreased: 'def' },
+    { name: 'Jolly', increased: 'speed', decreased: 'spatk' },
+    { name: 'Naive', increased: 'speed', decreased: 'spdef' },
+    { name: 'Modest', increased: 'spatk', decreased: 'atk' },
+    { name: 'Mild', increased: 'spatk', decreased: 'def' },
+    { name: 'Quiet', increased: 'spatk', decreased: 'speed' },
+    { name: 'Rash', increased: 'spatk', decreased: 'spdef' },
+    { name: 'Calm', increased: 'spdef', decreased: 'atk' },
+    { name: 'Gentle', increased: 'spdef', decreased: 'def' },
+    { name: 'Sassy', increased: 'spdef', decreased: 'speed' },
+    { name: 'Careful', increased: 'spdef', decreased: 'spatk' },
+    { name: 'Quirky', increased: null, decreased: null },
+    { name: 'Bashful', increased: null, decreased: null },
+    { name: 'Serious', increased: null, decreased: null },
+    { name: 'Docile', increased: null, decreased: null },
+    { name: 'Rash', increased: 'spatk', decreased: 'spdef' }, // Duplicate, remove one if needed
+];
+
+
 const DATA = {
     pokedex: [
-        { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokmon'], caught: false },
-        { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'], caught: false },
-        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'], caught: false },
-        { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokmon'], caught: false },
-        { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'], caught: false },
-        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'], caught: false },
-        { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokmon'], caught: false },
-        { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'], caught: false },
-        { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'], caught: false },
-        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'], caught: false },
-        // (This would be filled with all 400 Pokmon)
+        { id: 1, name: 'Sprigatito', types: ['Grass'], evolutions: [{ to: 'Floragato', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'], baseStats: { hp: 40, atk: 61, def: 54, spatk: 45, spdef: 45, speed: 65 } }, // Added baseStats
+        { id: 2, name: 'Floragato', types: ['Grass'], evolutions: [{ to: 'Meowscarada', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Sprigatito'], baseStats: { hp: 61, atk: 80, def: 63, spatk: 63, spdef: 63, speed: 83 } }, // Added baseStats
+        { id: 3, name: 'Meowscarada', types: ['Grass', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Floragato'], baseStats: { hp: 76, atk: 110, def: 70, spatk: 81, spdef: 70, speed: 123 } }, // Added baseStats
+        { id: 4, name: 'Fuecoco', types: ['Fire'], evolutions: [{ to: 'Crocalor', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'], baseStats: { hp: 67, atk: 45, def: 59, spatk: 63, spdef: 40, speed: 36 } }, // Added baseStats
+        { id: 5, name: 'Crocalor', types: ['Fire'], evolutions: [{ to: 'Skeledirge', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Fuecoco'], baseStats: { hp: 81, atk: 55, def: 78, spatk: 90, spdef: 58, speed: 49 } }, // Added baseStats
+        { id: 6, name: 'Skeledirge', types: ['Fire', 'Ghost'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Crocalor'], baseStats: { hp: 104, atk: 75, def: 100, spatk: 110, spdef: 75, speed: 66 } }, // Added baseStats
+        { id: 7, name: 'Quaxly', types: ['Water'], evolutions: [{ to: 'Quaxwell', at: 16 }], genders: ['Male', 'Female'], base: true, locations: ['Starter Pokémon'], baseStats: { hp: 55, atk: 65, def: 45, spatk: 50, spdef: 45, speed: 50 } }, // Added baseStats
+        { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'], baseStats: { hp: 70, atk: 85, def: 65, spatk: 65, spdef: 60, speed: 85 } }, // Added baseStats
+        { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'], baseStats: { hp: 85, atk: 120, def: 80, spatk: 85, spdef: 75, speed: 85 } }, // Added baseStats
+        { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'], baseStats: { hp: 54, atk: 45, def: 40, spatk: 35, spdef: 45, speed: 35 } }, // Added baseStats
+        // (This would be filled with all 400 Pokémon)
     ],
     gyms: [
         { name: 'Cortondo Gym', leader: 'Katy', type: 'Bug' }, { name: 'Artazon Gym', leader: 'Brassius', type: 'Grass' },
@@ -85,3 +116,4 @@ const DATA = {
         // (This would be filled with all 151 recipes)
     ]
 };
+
