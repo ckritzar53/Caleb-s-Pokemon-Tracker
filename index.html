@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Pokémon Tracker</title>
+    <title>Advanced Pokémon Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-900 text-gray-100">
@@ -15,16 +16,18 @@
             <div class="inline-block p-4 bg-red-600 rounded-full mb-4 border-4 border-gray-800 shadow-lg">
                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="21.17" y1="8" x2="12" y2="8"></line><line x1="3.95" y1="6.06" x2="8.54" y2="14"></line><line x1="10.88" y1="21.94" x2="15.46" y2="14"></line></svg>
             </div>
-            <h1 class="text-4xl font-bold text-white">Pokémon Scarlet & Violet Tracker</h1>
-            <p class="text-lg text-gray-400 mt-2">Your interactive completionist checklist.</p>
+            <h1 class="text-4xl font-bold text-white">Advanced Pokémon Tracker</h1>
+            <p class="text-lg text-gray-400 mt-2">Your Ultimate Scarlet & Violet Completionist Checklist</p>
         </header>
 
         <!-- Navigation -->
         <nav class="mb-8 overflow-x-auto whitespace-nowrap pb-2">
-            <div class="flex space-x-2 justify-center">
-                <button data-view="dashboard" class="nav-btn active font-semibold py-2 px-4 rounded-lg">Dashboard</button>
-                <button data-view="pokedex" class="nav-btn font-semibold py-2 px-4 rounded-lg">Pokédex</button>
-                <button data-view="story" class="nav-btn font-semibold py-2 px-4 rounded-lg">Milestones</button>
+            <div class="flex flex-wrap space-x-2 justify-center">
+                <button data-view="dashboard" class="nav-btn active">Dashboard</button>
+                <button data-view="pokedex" class="nav-btn">Pokédex</button>
+                <button data-view="gyms" class="nav-btn">Gyms</button>
+                <button data-view="tms" class="nav-btn">TMs</button>
+                <button data-view="items" class="nav-btn">Items</button>
             </div>
         </nav>
 
@@ -46,11 +49,27 @@
                 </div>
             </div>
 
-            <!-- Story View -->
-            <div id="story-view" class="view">
+            <!-- Other Views (Gyms, TMs, Items) -->
+            <div id="gyms-view" class="view">
                  <div class="bg-gray-800 p-4 rounded-lg">
-                    <div class="space-y-4" id="story-grid">
-                        <!-- Story items will be injected here by script.js -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="gyms-grid">
+                        <!-- Gym items will be injected here by script.js -->
+                    </div>
+                </div>
+            </div>
+            
+            <div id="tms-view" class="view">
+                 <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="tms-grid">
+                        <!-- TM items will be injected here by script.js -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="items-view" class="view">
+                 <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="items-grid">
+                        <!-- Item items will be injected here by script.js -->
                     </div>
                 </div>
             </div>
