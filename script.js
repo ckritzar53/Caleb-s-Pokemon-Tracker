@@ -2,13 +2,18 @@
 let appState = {};
 let currentEditingIndex = null;
 
-const createDefaultTeamMember = (species) => ({
-    species, nickname: species, level: 5, gender: 'Male', item: '', ability: '', nature: 'Hardy', metLocation: '',
-    stats: { hp: 0, atk: 0, def: 0, spatk: 0, spdef: 0, speed: 0 },
-    evs: { hp: 0, atk: 0, def: 0, spatk: 0, spdef: 0, speed: 0 },
-    ivs: { hp: 31, atk: 31, def: 31, spatk: 31, spdef: 31, speed: 31 },
-    moves: ['', '', '', ''], memories: '',
-});
+const createDefaultTeamMember = (species) => {
+    const speciesData = DATA.pokedex.find(p => p.name === species);
+    return {
+        species, nickname: species, level: 5, 
+        gender: speciesData.genders[0] || 'Genderless', 
+        item: '', ability: '', nature: 'Hardy', metLocation: '',
+        stats: { hp: 0, atk: 0, def: 0, spatk: 0, spdef: 0, speed: 0 },
+        evs: { hp: 0, atk: 0, def: 0, spatk: 0, spdef: 0, speed: 0 },
+        ivs: { hp: 31, atk: 31, def: 31, spatk: 31, spdef: 31, speed: 31 },
+        moves: ['', '', '', ''], memories: '',
+    };
+};
 
 function loadState() {
     try {
@@ -17,6 +22,10 @@ function loadState() {
         appState = savedState ? JSON.parse(savedState) : initialState;
         if (!appState.team || !Array.isArray(appState.team) || appState.team.length !== 6) {
             appState.team = Array(6).fill(null);
+        }
+        // Ensure pokedex is an object
+        if (typeof appState.pokedex !== 'object' || appState.pokedex === null) {
+            appState.pokedex = {};
         }
     } catch (e) {
         console.error("Could not load or parse state, resetting.", e);
@@ -27,6 +36,28 @@ function loadState() {
 function saveState() {
     localStorage.setItem('pokemonTrackerState', JSON.stringify(appState));
 }
+
+// --- THEME MANAGEMENT ---
+function applyTheme(theme) {
+    const themeIcon = document.getElementById('theme-icon');
+    if (theme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.classList.remove('fa-sun', 'text-yellow-300');
+        themeIcon.classList.add('fa-moon', 'text-indigo-400');
+    } else {
+        document.body.classList.remove('light-mode');
+        themeIcon.classList.remove('fa-moon', 'text-indigo-400');
+        themeIcon.classList.add('fa-sun', 'text-yellow-300');
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+}
+
 
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
@@ -168,8 +199,8 @@ function renderDashboard() {
     const cards = [...pokedexProgress, ...otherProgress].map(item => {
         const percentage = item.total > 0 ? (item.completed / item.total) * 100 : 0;
         return `<div class="card">
-            <h3 class="font-semibold text-lg mb-3 text-white">${item.title}</h3>
-            <div class="flex justify-between items-center mb-1 text-sm text-slate-400">
+            <h3 class="font-semibold text-lg mb-3 text-heading">${item.title}</h3>
+            <div class="flex justify-between items-center mb-1 text-sm text-secondary">
                 <span>Progress</span><span>${item.completed} / ${item.total}</span>
             </div>
             <div class="w-full progress-bar-bg rounded-full h-2.5"><div class="progress-bar-fill h-2.5 rounded-full" style="width: ${percentage}%"></div></div>
@@ -191,7 +222,7 @@ function renderPokedex() {
         
         return `<div class="pokedex-item">
             <div class="flex items-center justify-between">
-                <span class="text-white font-medium">${p.id}. ${p.name}</span>
+                <span class="text-primary font-medium">${p.id}. ${p.name}</span>
                 <div class="pokedex-status-icons" data-pokemon-name="${p.name}">
                     <i class="fas fa-eye status-icon ${seenClass}" data-status="seen"></i>
                     <i class="fas fa-fist-raised status-icon ${battledClass}" data-status="battled"></i>
@@ -215,9 +246,10 @@ function renderTeamBuilder() {
         if (!member) return `<div class="empty-team-slot" data-index="${index}"><i class="fas fa-plus text-4xl text-slate-600"></i></div>`;
         const speciesData = DATA.pokedex.find(p => p.name === member.species);
         const typesHtml = speciesData.types.map(type => `<span class="type-badge ${TYPE_COLORS[type]}">${type}</span>`).join(' ');
+        const genderIcon = member.gender === 'Male' ? '<i class="fas fa-mars gender-icon gender-male"></i>' : member.gender === 'Female' ? '<i class="fas fa-venus gender-icon gender-female"></i>' : '';
         return `<div class="team-summary-card" data-index="${index}">
-            <p class="font-bold text-xl text-white">${member.nickname}</p>
-            <p class="text-sm text-slate-400">Lv. ${member.level} ${member.species}</p>
+            <p class="font-bold text-xl text-heading">${member.nickname}</p>
+            <p class="text-sm text-secondary">Lv. ${member.level} ${member.species}${genderIcon}</p>
             <div class="my-2 flex gap-1.5 justify-center">${typesHtml}</div>
             <p class="text-xs text-slate-500 truncate mt-2">Held Item: ${member.item || 'None'}</p>
         </div>`;
@@ -231,14 +263,14 @@ function renderTeamBuilder() {
 
     container.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-            <h2 class="text-3xl font-bold text-white mb-4">My Team</h2>
+            <h2 class="text-3xl font-bold text-heading mb-4">My Team</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${teamSlots}</div>
         </div>
         <div>
-            <h2 class="text-3xl font-bold text-white mb-4">Pokémon Box</h2>
+            <h2 class="text-3xl font-bold text-heading mb-4">Pokémon Box</h2>
             <div class="card p-2">
                  <input type="text" id="box-search" placeholder="Search caught Pokémon..." value="${filter}" class="form-input mb-2">
-                <div class="max-h-80 overflow-y-auto space-y-2 p-2">${boxItems || `<p class="text-center text-slate-500">Catch Pokémon to add them!</p>`}</div>
+                <div class="max-h-80 overflow-y-auto space-y-2 p-2">${boxItems || `<p class="text-center text-secondary">Catch Pokémon to add them!</p>`}</div>
             </div>
         </div>
     </div>`;
@@ -253,7 +285,7 @@ function renderGenericList(category, title) {
         const isChecked = appState[id]?.includes(name);
         return `<label class="pokedex-item flex items-center cursor-pointer">
             <input type="checkbox" data-category="${id}" data-name="${name}" class="h-5 w-5 rounded bg-slate-600 border-slate-500 text-pink-500 focus:ring-pink-500" ${isChecked ? 'checked' : ''}>
-            <span class="ml-3 text-white">${item.id ? `TM${String(item.id).padStart(3, '0')}: ` : ''}${name}</span>
+            <span class="ml-3 text-primary">${item.id ? `TM${String(item.id).padStart(3, '0')}: ` : ''}${name}</span>
         </label>`;
     }).join('');
     container.innerHTML = `<div class="card">
@@ -269,8 +301,8 @@ function renderGyms() {
         return `<div class="card flex items-center">
             <input type="checkbox" data-category="gyms" data-name="${gym.name}" class="h-6 w-6 rounded bg-slate-600 border-slate-500 text-pink-500 focus:ring-pink-500" ${isChecked ? 'checked' : ''}>
             <div class="ml-4 flex-grow">
-                <h4 class="font-bold text-lg text-white">${gym.name}</h4>
-                <p class="text-slate-400">${gym.leader}</p>
+                <h4 class="font-bold text-lg text-heading">${gym.name}</h4>
+                <p class="text-secondary">${gym.leader}</p>
             </div>
             <span class="gym-type type-badge ${TYPE_COLORS[gym.type]}">${gym.type}</span>
         </div>`;
@@ -281,14 +313,33 @@ function renderGyms() {
 function renderPokemonEditor() {
     const member = appState.team[currentEditingIndex];
     if (!member) return;
+    const speciesData = DATA.pokedex.find(p => p.name === member.species);
 
     const itemOptions = '<option value="">None</option>' + DATA.items.map(i => `<option value="${i}">${i}</option>`).join('');
-    const moveOptions = '<option value="">-</option>' + DATA.moves.map(m => `<option value="${m}">${m}</option>`).join('');
     
+    // Create move options with types
+    const moveOptions = '<option value="">-</option>' + DATA.moves.map(m => {
+        return `<option value="${m.name}">${m.name}</option>`;
+    }).join('');
+    const moveSelectHTML = (id, selectedMove) => {
+        let html = `<select class="form-input" id="edit-move-${id}">`;
+        html += '<option value="">-</option>';
+        html += DATA.moves.map(m => {
+            const isSelected = m.name === selectedMove ? 'selected' : '';
+            return `<option value="${m.name}" ${isSelected}>${m.name} (${m.type})</option>`;
+        }).join('');
+        html += `</select>`;
+        return html;
+    };
+
+
+    // Create gender options based on species data
+    const genderOptions = speciesData.genders.map(g => `<option value="${g}">${g}</option>`).join('');
+
     document.getElementById('summary-tab').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div><label class="form-label">Nickname</label><input type="text" id="edit-nickname" class="form-input" value="${member.nickname}"></div>
-        <div><label class="form-label">Species</label><input type="text" class="form-input bg-slate-800" value="${member.species}" disabled></div>
-        <div><label class="form-label">Gender</label><select id="edit-gender" class="form-input"><option>Male</option><option>Female</option><option>Genderless</option></select></div>
+        <div><label class="form-label">Species</label><input type="text" class="form-input bg-card" value="${member.species}" disabled></div>
+        <div><label class="form-label">Gender</label><select id="edit-gender" class="form-input">${genderOptions}</select></div>
         <div><label class="form-label">Level</label><input type="number" id="edit-level" min="1" max="100" class="form-input" value="${member.level}"></div>
         <div><label class="form-label">Held Item</label><select id="edit-item" class="form-input">${itemOptions}</select></div>
         <div><label class="form-label">Ability</label><input type="text" id="edit-ability" class="form-input" value="${member.ability}"></div>
@@ -305,19 +356,19 @@ function renderPokemonEditor() {
 
     document.getElementById('stats-tab').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <h4 class="font-semibold mb-2 text-white">Stats</h4>
-            <div class="grid grid-cols-4 gap-2 text-sm items-center text-slate-400">
+            <h4 class="font-semibold mb-2 text-heading">Stats</h4>
+            <div class="grid grid-cols-4 gap-2 text-sm items-center text-secondary">
                 <span></span><span class="font-medium">Base</span><span class="font-medium">EVs</span><span class="font-medium">IVs</span>
                 ${statsInputs}
             </div>
         </div>
         <div>
-            <h4 class="font-semibold mb-2 text-white">Moves</h4>
+            <h4 class="font-semibold mb-2 text-heading">Moves</h4>
             <div class="space-y-2">
-                <select class="form-input" id="edit-move-1">${moveOptions}</select>
-                <select class="form-input" id="edit-move-2">${moveOptions}</select>
-                <select class="form-input" id="edit-move-3">${moveOptions}</select>
-                <select class="form-input" id="edit-move-4">${moveOptions}</select>
+                ${moveSelectHTML(1, member.moves[0])}
+                ${moveSelectHTML(2, member.moves[1])}
+                ${moveSelectHTML(3, member.moves[2])}
+                ${moveSelectHTML(4, member.moves[3])}
             </div>
         </div>
     </div>`;
@@ -329,15 +380,14 @@ function renderPokemonEditor() {
 
     document.getElementById('edit-gender').value = member.gender;
     document.getElementById('edit-item').value = member.item;
-    for(let i=0; i<4; i++) {
-        document.getElementById(`edit-move-${i+1}`).value = member.moves[i];
-    }
 }
 
 // --- INITIALIZATION & EVENT LISTENERS ---
 function setupEventListeners() {
     const mainContent = document.getElementById('main-content');
     const modal = document.getElementById('pokemon-editor-modal');
+
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
     document.body.addEventListener('click', e => {
         const navBtn = e.target.closest('.nav-btn');
@@ -356,12 +406,9 @@ function setupEventListeners() {
             return;
         }
 
-        const teamCard = e.target.closest('.team-summary-card, .empty-team-slot');
+        const teamCard = e.target.closest('.team-summary-card');
         if (teamCard) {
-            const index = parseInt(teamCard.dataset.index);
-            if(appState.team[index]) {
-                openEditorModal(index);
-            }
+            openEditorModal(parseInt(teamCard.dataset.index));
             return;
         }
         
@@ -402,6 +449,8 @@ function setupEventListeners() {
 
 function initializeApp() {
     loadState();
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
     renderView('dashboard');
     setupEventListeners();
 }
