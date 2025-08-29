@@ -29,9 +29,12 @@ function saveState() {
 }
 
 // --- CORE LOGIC & UPDATES ---
-function updatePokedexStatus(pokemonName, status) {
-    appState.pokedex[pokemonName] = appState.pokedex[pokemonName] === status ? null : status;
+function updatePokedexStatus(pokemonName, clickedStatus) {
+    const currentStatus = appState.pokedex[pokemonName];
+    // If clicking the current status, clear it. Otherwise, set it to the clicked status.
+    appState.pokedex[pokemonName] = currentStatus === clickedStatus ? null : clickedStatus;
     if (appState.pokedex[pokemonName] === null) delete appState.pokedex[pokemonName];
+    
     saveState();
     renderPokedex();
     renderDashboard();
@@ -116,12 +119,24 @@ function renderView(viewId) {
         tms: () => renderGenericList('tms', 'TMs'),
         items: () => renderGenericList('items', 'Items')
     };
-    views[viewId.replace(/-/g, '_')](); // e.g., team-builder -> team_builder
+    views[viewId.replace(/-/g, '_')]();
 }
 
 const getPokemonInChain = (pokemonName) => {
-    const baseForm = DATA.pokedex.find(p => p.evolutions.some(e => e.to === pokemonName)) || DATA.pokedex.find(p => p.name === pokemonName && p.base);
-    if (!baseForm) return [DATA.pokedex.find(p => p.name === pokemonName)];
+    // This function now correctly finds the base form of any Pokémon in an evolution line
+    let baseForm = DATA.pokedex.find(p => p.name === pokemonName);
+    if (!baseForm) return [];
+    
+    let isBase = false;
+    while (!isBase) {
+        const parent = DATA.pokedex.find(p => p.evolutions.some(e => e.to === baseForm.name));
+        if (parent) {
+            baseForm = parent;
+        } else {
+            isBase = true;
+        }
+    }
+
     let chain = [baseForm];
     let current = baseForm;
     while(current.evolutions.length > 0) {
@@ -133,11 +148,13 @@ const getPokemonInChain = (pokemonName) => {
     return chain.map(p => p.name);
 };
 
+
 // --- View-specific render functions ---
 function renderDashboard() {
     const container = document.getElementById('dashboard-view');
     const pokedexProgress = POKEDEX_STATUSES.map(status => {
-        const completed = Object.values(appState.pokedex).filter(s => s && POKEDEX_STATUSES.indexOf(s) >= POKEDEX_STATUSES.indexOf(status)).length;
+        const statusIndex = POKEDEX_STATUSES.indexOf(status);
+        const completed = Object.values(appState.pokedex).filter(s => s && POKEDEX_STATUSES.indexOf(s) >= statusIndex).length;
         const title = `Pokédex ${status.charAt(0).toUpperCase() + status.slice(1)}`;
         return { id: `pokedex-${status}`, title, completed, total: DATA.pokedex.length };
     });
@@ -162,15 +179,20 @@ function renderPokedex() {
     const filter = container.querySelector('input')?.value.toLowerCase() || '';
     const items = DATA.pokedex.filter(p => p.name.toLowerCase().includes(filter)).map(p => {
         const currentStatus = appState.pokedex[p.name];
-        const statusClasses = POKEDEX_STATUSES.map((s, i) => currentStatus && POKEDEX_STATUSES.indexOf(currentStatus) >= i ? `${s} active` : s).join(' ');
+        const statusIndex = currentStatus ? POKEDEX_STATUSES.indexOf(currentStatus) : -1;
+        const seenClass = statusIndex >= 0 ? 'seen active' : 'seen';
+        const battledClass = statusIndex >= 1 ? 'battled active' : 'battled';
+        const caughtClass = statusIndex >= 2 ? 'caught active' : 'caught';
+        
         const typesHtml = p.types.map(type => `<span class="type-badge ${TYPE_COLORS[type]}">${type}</span>`).join(' ');
+        
         return `<div class="pokedex-item">
             <div class="flex items-center justify-between">
                 <span class="text-white font-medium">${p.id}. ${p.name}</span>
                 <div class="pokedex-status-icons" data-pokemon-name="${p.name}">
-                    <i class="fas fa-eye status-icon ${statusClasses.includes('seen') ? 'seen active' : 'seen'}" data-status="seen"></i>
-                    <i class="fas fa-fist-raised status-icon ${statusClasses.includes('battled') ? 'battled active' : 'battled'}" data-status="battled"></i>
-                    <i class="fas fa-circle-check status-icon ${statusClasses.includes('caught') ? 'caught active' : 'caught'}" data-status="caught"></i>
+                    <i class="fas fa-eye status-icon ${seenClass}" data-status="seen"></i>
+                    <i class="fas fa-fist-raised status-icon ${battledClass}" data-status="battled"></i>
+                    <i class="fas fa-circle-check status-icon ${caughtClass}" data-status="caught"></i>
                 </div>
             </div>
             <div class="mt-2 flex gap-1.5">${typesHtml}</div>
@@ -186,7 +208,6 @@ function renderTeamBuilder() {
     const container = document.getElementById('team-builder-view');
     const filter = container.querySelector('#box-search')?.value.toLowerCase() || '';
     
-    // Team Slots
     const teamSlots = appState.team.map((member, index) => {
         if (!member) return `<div class="empty-team-slot" data-index="${index}"><i class="fas fa-plus text-4xl text-slate-600"></i></div>`;
         const speciesData = DATA.pokedex.find(p => p.name === member.species);
@@ -199,9 +220,10 @@ function renderTeamBuilder() {
         </div>`;
     }).join('');
 
-    // Pokémon Box
-    const caughtPokemon = new Set(Object.keys(appState.pokedex).filter(name => appState.pokedex[name] === 'caught'));
-    const baseFormsToShow = DATA.pokedex.filter(p => p.base && getPokemonInChain(p.name).some(name => caughtPokemon.has(name))).map(p => p.name);
+    const caughtPokemonNames = Object.keys(appState.pokedex).filter(name => appState.pokedex[name] === 'caught');
+    const caughtChains = new Set(caughtPokemonNames.flatMap(name => getPokemonInChain(name)));
+    const baseFormsToShow = DATA.pokedex.filter(p => p.base && caughtChains.has(p.name)).map(p => p.name);
+    
     const boxItems = baseFormsToShow.filter(name => name.toLowerCase().includes(filter)).map(name => `<div class="box-pokemon" data-name="${name}"><span>${name}</span><i class="fas fa-plus text-slate-400"></i></div>`).join('');
 
     container.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -213,7 +235,7 @@ function renderTeamBuilder() {
             <h2 class="text-3xl font-bold text-white mb-4">Pokémon Box</h2>
             <div class="card p-2">
                  <input type="text" id="box-search" placeholder="Search caught Pokémon..." value="${filter}" class="form-input mb-2">
-                <div class="max-h-80 overflow-y-auto space-y-2 p-2">${boxItems || `<p class="text-center text-slate-500">No caught Pokémon</p>`}</div>
+                <div class="max-h-80 overflow-y-auto space-y-2 p-2">${boxItems || `<p class="text-center text-slate-500">Catch Pokémon to add them!</p>`}</div>
             </div>
         </div>
     </div>`;
@@ -257,17 +279,13 @@ function renderPokemonEditor() {
     const member = appState.team[currentEditingIndex];
     if (!member) return;
 
-    const summaryPane = document.getElementById('summary-tab');
-    const statsPane = document.getElementById('stats-tab');
-    const memoriesPane = document.getElementById('memories-tab');
-
-    const itemOptions = '<option value="">None</option>' + DATA.items.map(i => `<option value="${i}" ${member.item === i ? 'selected' : ''}>${i}</option>`).join('');
+    const itemOptions = '<option value="">None</option>' + DATA.items.map(i => `<option value="${i}">${i}</option>`).join('');
     const moveOptions = '<option value="">-</option>' + DATA.moves.map(m => `<option value="${m}">${m}</option>`).join('');
     
-    summaryPane.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    document.getElementById('summary-tab').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div><label class="form-label">Nickname</label><input type="text" id="edit-nickname" class="form-input" value="${member.nickname}"></div>
-        <div><label class="form-label">Species</label><input type="text" id="edit-species" class="form-input bg-slate-800" value="${member.species}" disabled></div>
-        <div><label class="form-label">Gender</label><select id="edit-gender" class="form-input"><option ${member.gender === 'Male' ? 'selected':''}>Male</option><option ${member.gender === 'Female' ? 'selected':''}>Female</option><option ${member.gender === 'Genderless' ? 'selected':''}>Genderless</option></select></div>
+        <div><label class="form-label">Species</label><input type="text" class="form-input bg-slate-800" value="${member.species}" disabled></div>
+        <div><label class="form-label">Gender</label><select id="edit-gender" class="form-input"><option>Male</option><option>Female</option><option>Genderless</option></select></div>
         <div><label class="form-label">Level</label><input type="number" id="edit-level" min="1" max="100" class="form-input" value="${member.level}"></div>
         <div><label class="form-label">Held Item</label><select id="edit-item" class="form-input">${itemOptions}</select></div>
         <div><label class="form-label">Ability</label><input type="text" id="edit-ability" class="form-input" value="${member.ability}"></div>
@@ -277,12 +295,12 @@ function renderPokemonEditor() {
     
     const statsInputs = ['hp','atk','def','spatk','spdef','speed'].map(stat => `
         <label>${stat.toUpperCase()}</label>
-        <input type="number" id="edit-stat-${stat}" class="form-input-sm" value="${member.stats[stat]}" placeholder="Base">
-        <input type="number" id="edit-ev-${stat}" class="form-input-sm" value="${member.evs[stat]}" placeholder="EVs">
-        <input type="number" id="edit-iv-${stat}" class="form-input-sm" value="${member.ivs[stat]}" placeholder="IVs">
+        <input type="number" id="edit-stat-${stat}" class="form-input form-input-sm" value="${member.stats[stat]}" placeholder="Base">
+        <input type="number" id="edit-ev-${stat}" class="form-input form-input-sm" value="${member.evs[stat]}" placeholder="EVs">
+        <input type="number" id="edit-iv-${stat}" class="form-input form-input-sm" value="${member.ivs[stat]}" placeholder="IVs">
     `).join('');
 
-    statsPane.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    document.getElementById('stats-tab').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <h4 class="font-semibold mb-2 text-white">Stats</h4>
             <div class="grid grid-cols-4 gap-2 text-sm items-center text-slate-400">
@@ -293,26 +311,34 @@ function renderPokemonEditor() {
         <div>
             <h4 class="font-semibold mb-2 text-white">Moves</h4>
             <div class="space-y-2">
-                <select class="form-input" id="edit-move-1">${moveOptions.replace(`value="${member.moves[0]}"`, `value="${member.moves[0]}" selected`)}</select>
-                <select class="form-input" id="edit-move-2">${moveOptions.replace(`value="${member.moves[1]}"`, `value="${member.moves[1]}" selected`)}</select>
-                <select class="form-input" id="edit-move-3">${moveOptions.replace(`value="${member.moves[2]}"`, `value="${member.moves[2]}" selected`)}</select>
-                <select class="form-input" id="edit-move-4">${moveOptions.replace(`value="${member.moves[3]}"`, `value="${member.moves[3]}" selected`)}</select>
+                <select class="form-input" id="edit-move-1">${moveOptions}</select>
+                <select class="form-input" id="edit-move-2">${moveOptions}</select>
+                <select class="form-input" id="edit-move-3">${moveOptions}</select>
+                <select class="form-input" id="edit-move-4">${moveOptions}</select>
             </div>
         </div>
     </div>`;
 
-    memoriesPane.innerHTML = `
+    document.getElementById('memories-tab').innerHTML = `
         <label class="form-label">Write down your memories with this Pokémon!</label>
         <textarea id="edit-memories" class="form-input" rows="6" placeholder="Met on Route 1...">${member.memories}</textarea>
     `;
+
+    // Now set the values for selects and other complex fields
+    document.getElementById('edit-gender').value = member.gender;
+    document.getElementById('edit-item').value = member.item;
+    for(let i=0; i<4; i++) {
+        document.getElementById(`edit-move-${i+1}`).value = member.moves[i];
+    }
 }
 
 // --- INITIALIZATION & EVENT LISTENERS ---
 function setupEventListeners() {
-    const mainContainer = document.querySelector('.max-w-7xl');
+    const mainContent = document.getElementById('main-content');
+    const modal = document.getElementById('pokemon-editor-modal');
 
-    mainContainer.addEventListener('click', e => {
-        // Tab Navigation
+    // Main navigation and content area clicks
+    document.body.addEventListener('click', e => {
         const navBtn = e.target.closest('.nav-btn');
         if (navBtn) {
             document.querySelectorAll('.nav-btn, .view').forEach(el => el.classList.remove('active'));
@@ -323,45 +349,48 @@ function setupEventListeners() {
             return;
         }
 
-        // Pokedex Status
         const statusIcon = e.target.closest('.status-icon');
         if (statusIcon) {
             updatePokedexStatus(statusIcon.parentElement.dataset.pokemonName, statusIcon.dataset.status);
             return;
         }
 
-        // Team Builder
         const teamCard = e.target.closest('.team-summary-card, .empty-team-slot');
         if (teamCard) {
             const index = parseInt(teamCard.dataset.index);
-            if (appState.team[index]) openEditorModal(index);
+            if (appState.team[index] || appState.team[index] === null) openEditorModal(index);
             else document.getElementById('box-search')?.focus();
             return;
         }
+        
         const boxMon = e.target.closest('.box-pokemon');
         if (boxMon) {
             addPokemonToTeam(boxMon.dataset.name);
             return;
         }
+    });
 
-        // Modal Controls
+    // Modal-specific clicks
+    modal.addEventListener('click', e => {
         if (e.target.closest('#modal-close-btn')) closeEditorModal();
         if (e.target.closest('#modal-save-btn')) savePokemonDetails();
+        
         const modalTab = e.target.closest('.modal-tab');
         if (modalTab) {
-            document.querySelectorAll('.modal-tab, .modal-tab-pane').forEach(el => el.classList.remove('active'));
+            modal.querySelectorAll('.modal-tab, .modal-tab-pane').forEach(el => el.classList.remove('active'));
             modalTab.classList.add('active');
-            document.getElementById(`${modalTab.dataset.tab}-tab`).classList.add('active');
+            modal.querySelector(`#${modalTab.dataset.tab}-tab`).classList.add('active');
         }
     });
 
-    mainContainer.addEventListener('change', e => {
+    // Input and Change events
+    mainContent.addEventListener('change', e => {
         if (e.target.type === 'checkbox') {
             updateCheckboxState(e.target.dataset.category, e.target.dataset.name, e.target.checked);
         }
     });
     
-    mainContainer.addEventListener('input', e => {
+    mainContent.addEventListener('input', e => {
         const targetId = e.target.id;
         if (targetId === 'pokedex-search') renderPokedex();
         else if (targetId === 'box-search') renderTeamBuilder();
