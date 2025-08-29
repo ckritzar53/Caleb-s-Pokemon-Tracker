@@ -31,7 +31,6 @@ function saveState() {
 // --- CORE LOGIC & UPDATES ---
 function updatePokedexStatus(pokemonName, clickedStatus) {
     const currentStatus = appState.pokedex[pokemonName];
-    // If clicking the current status, clear it. Otherwise, set it to the clicked status.
     appState.pokedex[pokemonName] = currentStatus === clickedStatus ? null : clickedStatus;
     if (appState.pokedex[pokemonName] === null) delete appState.pokedex[pokemonName];
     
@@ -58,6 +57,14 @@ function addPokemonToTeam(species) {
     } else {
         alert("Your team is full!");
     }
+}
+
+function removePokemonFromTeam() {
+    if (currentEditingIndex === null) return;
+    appState.team[currentEditingIndex] = null;
+    saveState();
+    renderTeamBuilder();
+    closeEditorModal();
 }
 
 function handleLevelChange(teamIndex) {
@@ -103,7 +110,7 @@ function savePokemonDetails() {
     });
     member.moves = [1, 2, 3, 4].map(i => document.getElementById(`edit-move-${i}`).value);
     member.memories = document.getElementById('edit-memories').value;
-    handleLevelChange(currentEditingIndex); // Check for evolution after level change
+    handleLevelChange(currentEditingIndex);
     saveState();
     renderTeamBuilder();
     closeEditorModal();
@@ -123,7 +130,6 @@ function renderView(viewId) {
 }
 
 const getPokemonInChain = (pokemonName) => {
-    // This function now correctly finds the base form of any Pokémon in an evolution line
     let baseForm = DATA.pokedex.find(p => p.name === pokemonName);
     if (!baseForm) return [];
     
@@ -148,8 +154,6 @@ const getPokemonInChain = (pokemonName) => {
     return chain.map(p => p.name);
 };
 
-
-// --- View-specific render functions ---
 function renderDashboard() {
     const container = document.getElementById('dashboard-view');
     const pokedexProgress = POKEDEX_STATUSES.map(status => {
@@ -183,7 +187,6 @@ function renderPokedex() {
         const seenClass = statusIndex >= 0 ? 'seen active' : 'seen';
         const battledClass = statusIndex >= 1 ? 'battled active' : 'battled';
         const caughtClass = statusIndex >= 2 ? 'caught active' : 'caught';
-        
         const typesHtml = p.types.map(type => `<span class="type-badge ${TYPE_COLORS[type]}">${type}</span>`).join(' ');
         
         return `<div class="pokedex-item">
@@ -324,7 +327,6 @@ function renderPokemonEditor() {
         <textarea id="edit-memories" class="form-input" rows="6" placeholder="Met on Route 1...">${member.memories}</textarea>
     `;
 
-    // Now set the values for selects and other complex fields
     document.getElementById('edit-gender').value = member.gender;
     document.getElementById('edit-item').value = member.item;
     for(let i=0; i<4; i++) {
@@ -337,7 +339,6 @@ function setupEventListeners() {
     const mainContent = document.getElementById('main-content');
     const modal = document.getElementById('pokemon-editor-modal');
 
-    // Main navigation and content area clicks
     document.body.addEventListener('click', e => {
         const navBtn = e.target.closest('.nav-btn');
         if (navBtn) {
@@ -358,8 +359,9 @@ function setupEventListeners() {
         const teamCard = e.target.closest('.team-summary-card, .empty-team-slot');
         if (teamCard) {
             const index = parseInt(teamCard.dataset.index);
-            if (appState.team[index] || appState.team[index] === null) openEditorModal(index);
-            else document.getElementById('box-search')?.focus();
+            if(appState.team[index]) {
+                openEditorModal(index);
+            }
             return;
         }
         
@@ -370,10 +372,10 @@ function setupEventListeners() {
         }
     });
 
-    // Modal-specific clicks
     modal.addEventListener('click', e => {
         if (e.target.closest('#modal-close-btn')) closeEditorModal();
         if (e.target.closest('#modal-save-btn')) savePokemonDetails();
+        if (e.target.closest('#modal-remove-btn')) removePokemonFromTeam();
         
         const modalTab = e.target.closest('.modal-tab');
         if (modalTab) {
@@ -383,7 +385,6 @@ function setupEventListeners() {
         }
     });
 
-    // Input and Change events
     mainContent.addEventListener('change', e => {
         if (e.target.type === 'checkbox') {
             updateCheckboxState(e.target.dataset.category, e.target.dataset.name, e.target.checked);
