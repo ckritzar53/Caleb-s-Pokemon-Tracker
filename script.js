@@ -19,19 +19,18 @@ function saveState() {
 }
 
 function updatePokedexStatus(pokemonName, status) {
-    // If the current status is clicked again, set it to none.
     if (appState.pokedex[pokemonName] === status) {
         delete appState.pokedex[pokemonName];
     } else {
         appState.pokedex[pokemonName] = status;
     }
     saveState();
-    renderPokedex(document.getElementById('pokedex-search').value); // Re-render to update UI
+    renderPokedex(document.getElementById('pokedex-search').value);
     updateDashboard();
 }
 
 function updateCheckboxState(category, itemName, isChecked) {
-    const items = new Set(appState[category]);
+    const items = new Set(appState[category] || []);
     if (isChecked) {
         items.add(itemName);
     } else {
@@ -48,46 +47,40 @@ function renderDashboard() {
     const grid = document.getElementById('dashboard-grid');
     grid.innerHTML = '';
     
-    // Advanced Pokedex Progress
+    // Pokedex Progress Cards
     POKEDEX_STATUSES.forEach(status => {
         const total = DATA.pokedex.length;
         const completed = Object.values(appState.pokedex).filter(s => POKEDEX_STATUSES.indexOf(s) >= POKEDEX_STATUSES.indexOf(status)).length;
         const percentage = total > 0 ? (completed / total) * 100 : 0;
         const title = `Pokédex ${status.charAt(0).toUpperCase() + status.slice(1)}`;
-
-        const card = `
-            <div class="bg-gray-800 p-4 rounded-lg">
-                <h3 class="font-semibold text-lg mb-2">${title}</h3>
-                <div class="flex justify-between items-center mb-1 text-sm text-gray-400">
-                    <span>Progress</span>
-                    <span id="pokedex-${status}-progress-text">${completed} / ${total}</span>
-                </div>
-                <div class="w-full progress-bar-bg rounded-full h-2.5">
-                    <div id="pokedex-${status}-progress-bar" class="progress-bar-fill h-2.5 rounded-full" style="width: ${percentage}%"></div>
-                </div>
-            </div>`;
+        const card = createProgressCard(`pokedex-${status}`, title, completed, total, percentage);
         grid.innerHTML += card;
     });
 
-    // Other Categories Progress
+    // Other Categories Progress Cards
     CATEGORIES.forEach(cat => {
         const total = DATA[cat.id].length;
         const completed = appState[cat.id]?.length || 0;
         const percentage = total > 0 ? (completed / total) * 100 : 0;
-        const card = `
-            <div class="bg-gray-800 p-4 rounded-lg">
-                <h3 class="font-semibold text-lg mb-2">${cat.title}</h3>
-                <div class="flex justify-between items-center mb-1 text-sm text-gray-400">
-                    <span>Progress</span>
-                    <span id="${cat.id}-progress-text">${completed} / ${total}</span>
-                </div>
-                <div class="w-full progress-bar-bg rounded-full h-2.5">
-                    <div id="${cat.id}-progress-bar" class="progress-bar-fill h-2.5 rounded-full" style="width: ${percentage}%"></div>
-                </div>
-            </div>`;
+        const card = createProgressCard(cat.id, cat.title, completed, total, percentage);
         grid.innerHTML += card;
     });
 }
+
+function createProgressCard(id, title, completed, total, percentage) {
+    return `
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+            <h3 class="font-semibold text-lg mb-3 text-gray-800">${title}</h3>
+            <div class="flex justify-between items-center mb-1 text-sm text-gray-500">
+                <span>Progress</span>
+                <span id="${id}-progress-text">${completed} / ${total}</span>
+            </div>
+            <div class="w-full progress-bar-bg rounded-full h-2">
+                <div id="${id}-progress-bar" class="progress-bar-fill h-2 rounded-full" style="width: ${percentage}%"></div>
+            </div>
+        </div>`;
+}
+
 
 function updateDashboard() {
      POKEDEX_STATUSES.forEach(status => {
@@ -120,8 +113,8 @@ function renderPokedex(filter = '') {
             const caughtActive = currentStatus && POKEDEX_STATUSES.indexOf(currentStatus) >= 2 ? 'active' : '';
 
             const item = `
-                <div class="flex items-center justify-between bg-gray-700 p-3 rounded-md">
-                    <span class="text-white">${p.id}. ${p.name}</span>
+                <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-gray-200">
+                    <span class="text-gray-700 font-medium">${p.id}. ${p.name}</span>
                     <div class="pokedex-status-icons" data-pokemon-name="${p.name}">
                         <i class="fas fa-eye status-icon seen ${seenActive}" data-status="seen" title="Seen"></i>
                         <i class="fas fa-fist-raised status-icon battled ${battledActive}" data-status="battled" title="Battled"></i>
@@ -132,17 +125,21 @@ function renderPokedex(filter = '') {
     });
 }
 
-function renderGenericList(category, gridId) {
+function renderGenericList(category, gridId, filter = '') {
     const grid = document.getElementById(gridId);
     grid.innerHTML = '';
-    DATA[category].forEach(item => {
-        const isChecked = appState[category].includes(item.name);
-        const element = `
-            <label class="list-item-label flex items-center bg-gray-700 p-3 rounded-md hover:bg-gray-600">
-                <input type="checkbox" data-category="${category}" data-name="${item.name}" class="w-5 h-5 rounded text-indigo-500 bg-gray-800 border-gray-600 focus:ring-indigo-600" ${isChecked ? 'checked' : ''}>
-                <span class="ml-3 text-white">${item.id ? `${item.id}. ` : ''}${item.name}</span>
-            </label>`;
-        grid.innerHTML += element;
+    const lowercasedFilter = filter.toLowerCase();
+
+    DATA[category]
+        .filter(item => item.name.toLowerCase().includes(lowercasedFilter))
+        .forEach(item => {
+            const isChecked = appState[category]?.includes(item.name) || false;
+            const element = `
+                <label class="list-item-container">
+                    <input type="checkbox" data-category="${category}" data-name="${item.name}" class="checkbox-style" ${isChecked ? 'checked' : ''}>
+                    <span class="ml-3 text-gray-700">${item.id ? `TM${String(item.id).padStart(3, '0')}: ` : ''}${item.name}</span>
+                </label>`;
+            grid.innerHTML += element;
     });
 }
 
@@ -150,24 +147,24 @@ function renderGyms() {
     const grid = document.getElementById('gyms-grid');
     grid.innerHTML = '';
     DATA.gyms.forEach(gym => {
-        const isChecked = appState.gyms.includes(gym.name);
+        const isChecked = appState.gyms?.includes(gym.name) || false;
         const card = `
             <div class="gym-card">
-                <input type="checkbox" data-category="gyms" data-name="${gym.name}" class="w-6 h-6 rounded text-indigo-500 bg-gray-800 border-gray-600 focus:ring-indigo-600 flex-shrink-0" ${isChecked ? 'checked' : ''}>
+                <input type="checkbox" data-category="gyms" data-name="${gym.name}" class="checkbox-style flex-shrink-0" ${isChecked ? 'checked' : ''}>
                 <div class="gym-info">
-                    <h4 class="font-bold text-xl">${gym.name}</h4>
-                    <p class="text-gray-400">${gym.leader}</p>
-                    <span class="gym-type ${gym.typeColor} text-gray-900">${gym.type} Type</span>
+                    <h4 class="font-bold text-lg text-gray-800">${gym.name}</h4>
+                    <p class="text-gray-500">${gym.leader}</p>
+                    <span class="gym-type ${gym.color}">${gym.type}</span>
                 </div>
             </div>`;
         grid.innerHTML += card;
     });
 }
 
-
 // --- EVENT HANDLING & INITIALIZATION ---
 
 function setupEventListeners() {
+    // Tab Navigation
     document.querySelectorAll('.nav-btn').forEach(button => {
         button.addEventListener('click', () => {
             const viewId = button.dataset.view;
@@ -178,6 +175,7 @@ function setupEventListeners() {
         });
     });
 
+    // Pokedex icon clicks
     document.querySelector('main').addEventListener('click', (e) => {
         const statusIcon = e.target.closest('.status-icon');
         if (statusIcon) {
@@ -187,6 +185,7 @@ function setupEventListeners() {
         }
     });
 
+    // Checkbox changes for Gyms, TMs, Items
     document.querySelector('main').addEventListener('change', (e) => {
         if (e.target.type === 'checkbox') {
             const category = e.target.dataset.category;
@@ -196,9 +195,10 @@ function setupEventListeners() {
         }
     });
 
-    document.getElementById('pokedex-search').addEventListener('input', (e) => {
-        renderPokedex(e.target.value);
-    });
+    // Search/Filter Listeners
+    document.getElementById('pokedex-search').addEventListener('input', (e) => renderPokedex(e.target.value));
+    document.getElementById('tms-search').addEventListener('input', (e) => renderGenericList('tms', 'tms-grid', e.target.value));
+    document.getElementById('items-search').addEventListener('input', (e) => renderGenericList('items', 'items-grid', e.target.value));
 }
 
 function initializeApp() {
