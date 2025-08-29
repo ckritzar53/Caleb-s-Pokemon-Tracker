@@ -3,74 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <title>Pokémon SV Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-primary text-primary transition-colors duration-300">
+<body class="bg-primary text-primary transition-colors duration-300 ease-in-out">
 
     <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="text-center mb-10 relative">
-            <h1 class="text-4xl sm:text-5xl font-bold text-heading tracking-tight">Pokémon Tracker</h1>
-            <p class="text-lg text-secondary mt-2">Your Completionist Checklist</p>
-            
-            <!-- Theme Toggle -->
-            <div class="absolute top-0 right-0 p-2">
-                <button id="theme-toggle" class="h-10 w-10 flex items-center justify-center rounded-lg bg-secondary text-secondary hover:text-heading transition-colors">
-                    <i id="theme-icon" class="fas fa-sun text-xl"></i>
-                </button>
-            </div>
+        <header class="flex justify-between items-center mb-6 sm:mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-heading">Pokémon Tracker</h1>
+            <button id="theme-toggle" class="text-2xl text-secondary hover:text-heading transition-colors" aria-label="Toggle Theme">
+                <i id="theme-icon" class="fas fa-sun"></i>
+            </button>
         </header>
 
         <!-- Navigation -->
-        <nav class="sticky top-4 z-50 mb-8 flex justify-center">
-            <div class="flex flex-wrap space-x-2 justify-center bg-secondary p-1.5 rounded-xl shadow-sm">
+        <nav class="mb-6 sm:mb-8 overflow-x-auto pb-2">
+            <div class="flex space-x-2 justify-start sm:justify-center">
                 <button data-view="dashboard" class="nav-btn active">Dashboard</button>
                 <button data-view="pokedex" class="nav-btn">Pokédex</button>
                 <button data-view="team-builder" class="nav-btn">Team Builder</button>
                 <button data-view="gyms" class="nav-btn">Gyms</button>
                 <button data-view="tms" class="nav-btn">TMs</button>
                 <button data-view="items" class="nav-btn">Items</button>
+                <button data-view="sandwiches" class="nav-btn">Sandwiches</button>
             </div>
         </nav>
 
-        <main id="main-content">
-            <!-- Views will be populated by script.js -->
+        <main>
+            <!-- Views will be dynamically populated here -->
             <div id="dashboard-view" class="view active"></div>
             <div id="pokedex-view" class="view"></div>
             <div id="team-builder-view" class="view"></div>
             <div id="gyms-view" class="view"></div>
             <div id="tms-view" class="view"></div>
             <div id="items-view" class="view"></div>
+            <div id="sandwiches-view" class="view"></div>
         </main>
     </div>
 
     <!-- Pokémon Editor Modal -->
     <div id="pokemon-editor-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <div id="modal-header" class="p-4 border-b border-border flex justify-between items-center flex-shrink-0">
-                <h2 class="text-xl font-bold text-heading">Edit Pokémon</h2>
-                <button id="modal-close-btn" class="text-secondary hover:text-heading transition-colors">&times;</button>
+            <div class="flex justify-between items-center p-4 border-b border-border">
+                <h3 class="text-2xl font-bold text-heading">Edit Pokémon</h3>
+                <button id="modal-close-btn" class="text-3xl text-secondary hover:text-heading">&times;</button>
             </div>
-            <div id="modal-body" class="p-4 overflow-y-auto">
-                <div class="border-b border-border mb-4">
-                    <nav class="-mb-px flex space-x-6" id="modal-tabs">
-                        <button class="modal-tab active" data-tab="summary">Summary</button>
-                        <button class="modal-tab" data-tab="stats">Stats & Moves</button>
-                        <button class="modal-tab" data-tab="memories">Memories</button>
-                    </nav>
+            <div class="p-4 flex-grow overflow-y-auto">
+                <div class="flex border-b border-border mb-4">
+                    <button class="modal-tab active" data-tab="summary">Summary</button>
+                    <button class="modal-tab" data-tab="stats">Stats & Moves</button>
+                    <button class="modal-tab" data-tab="memories">Memories</button>
                 </div>
-                <div id="modal-tab-content">
-                    <div class="modal-tab-pane active" id="summary-tab"></div>
-                    <div class="modal-tab-pane" id="stats-tab"></div>
-                    <div class="modal-tab-pane" id="memories-tab"></div>
-                </div>
+                <div id="summary-tab" class="modal-tab-pane active"></div>
+                <div id="stats-tab" class="modal-tab-pane"></div>
+                <div id="memories-tab" class="modal-tab-pane"></div>
             </div>
-            <div id="modal-footer" class="p-4 bg-primary rounded-b-xl border-t border-border flex justify-between items-center flex-shrink-0">
-                <button id="modal-remove-btn" class="remove-button">Remove</button>
+            <div class="flex justify-between p-4 border-t border-border bg-primary">
+                <button id="modal-remove-btn" class="remove-button">Remove from Team</button>
                 <button id="modal-save-btn" class="save-button">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pokedex Detail Modal -->
+    <div id="pokedex-detail-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+             <div class="flex justify-between items-center p-4 border-b border-border">
+                <h3 id="detail-modal-title" class="text-2xl font-bold text-heading">Pokémon Details</h3>
+                <button id="detail-modal-close-btn" class="text-3xl text-secondary hover:text-heading">&times;</button>
+            </div>
+            <div id="detail-modal-body" class="p-4 flex-grow overflow-y-auto">
+                <!-- Content will be injected here -->
             </div>
         </div>
     </div>
