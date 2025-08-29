@@ -15,8 +15,8 @@
     --border-dark: #3a3a3c; /* dark gray */
 
     --accent-blue: #007aff;
-    --accent-red: #ff3b30; /* Danger Red */
-    --accent-green: #34c759; /* Green */
+    --accent-red: #ff3b30;
+    --accent-green: #34c759;
 }
 
 body {
