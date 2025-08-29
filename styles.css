@@ -122,4 +122,3 @@ body.light-mode .remove-button:hover { background-color: #ffdbdb; }
 }
 .form-input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); }
 .form-input-sm { padding: 0.4rem; }
-
