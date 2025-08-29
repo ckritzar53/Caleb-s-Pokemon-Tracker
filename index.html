@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon SV Tracker</title>
+    <title>Pokémon Tracker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,9 +18,8 @@
             </button>
         </header>
 
-        <!-- Navigation -->
         <nav class="mb-6 sm:mb-8 overflow-x-auto pb-2">
-            <div class="flex space-x-2 justify-start sm:justify-center">
+            <div class="flex space-x-2 justify-start sm:justify-center bg-secondary p-1.5 rounded-xl shadow-sm">
                 <button data-view="dashboard" class="nav-btn active">Dashboard</button>
                 <button data-view="pokedex" class="nav-btn">Pokédex</button>
                 <button data-view="team-builder" class="nav-btn">Team Builder</button>
@@ -32,7 +31,6 @@
         </nav>
 
         <main>
-            <!-- Views will be dynamically populated here -->
             <div id="dashboard-view" class="view active"></div>
             <div id="pokedex-view" class="view"></div>
             <div id="team-builder-view" class="view"></div>
@@ -43,7 +41,6 @@
         </main>
     </div>
 
-    <!-- Pokémon Editor Modal -->
     <div id="pokemon-editor-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <div class="flex justify-between items-center p-4 border-b border-border">
@@ -60,14 +57,13 @@
                 <div id="stats-tab" class="modal-tab-pane"></div>
                 <div id="memories-tab" class="modal-tab-pane"></div>
             </div>
-            <div class="flex justify-between p-4 border-t border-border bg-primary">
-                <button id="modal-remove-btn" class="remove-button">Remove from Team</button>
+            <div class="flex justify-between p-4 border-t border-border bg-primary rounded-b-xl">
+                <button id="modal-remove-btn" class="remove-button">Remove</button>
                 <button id="modal-save-btn" class="save-button">Save Changes</button>
             </div>
         </div>
     </div>
     
-    <!-- Pokedex Detail Modal -->
     <div id="pokedex-detail-modal" class="modal-overlay hidden">
         <div class="modal-content">
              <div class="flex justify-between items-center p-4 border-b border-border">
@@ -75,8 +71,7 @@
                 <button id="detail-modal-close-btn" class="text-3xl text-secondary hover:text-heading">&times;</button>
             </div>
             <div id="detail-modal-body" class="p-4 flex-grow overflow-y-auto">
-                <!-- Content will be injected here -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -84,4 +79,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
