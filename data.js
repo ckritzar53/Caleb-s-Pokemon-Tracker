@@ -60,38 +60,28 @@ const DATA = {
         { id: 8, name: 'Quaxwell', types: ['Water'], evolutions: [{ to: 'Quaquaval', at: 36 }], genders: ['Male', 'Female'], locations: ['Evolve Quaxly'] },
         { id: 9, name: 'Quaquaval', types: ['Water', 'Fighting'], evolutions: [], genders: ['Male', 'Female'], locations: ['Evolve Quaxwell'] },
         { id: 10, name: 'Lechonk', types: ['Normal'], evolutions: [{ to: 'Oinkologne', at: 18 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Three)', 'South Province (Area Four)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)'] },
-        { id: 11, name: 'Oinkologne', types: ['Normal'], evolutions: [], genders: ['Male', 'Female'], locations: ['South Province (Area Three)', 'South Province (Area Five)', 'East Province (Area One)', 'East Province (Area Two)', 'West Province (Area Two)', 'West Province (Area Three)', 'Tagtree Thicket'] },
-        { id: 12, name: 'Tarountula', types: ['Bug'], evolutions: [{ to: 'Spidops', at: 15 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area One)', 'South Province (Area Two)', 'South Province (Area Four)'] },
-        { id: 13, name: 'Spidops', types: ['Bug'], evolutions: [], genders: ['Male', 'Female'], locations: ['East Province (Area One)', 'East Province (Area Two)', 'Tagtree Thicket', 'West Province (Area Three)', 'North Province (Area Two)'] },
-        { id: 14, name: 'Nymble', types: ['Bug'], evolutions: [{ to: 'Lokix', at: 24 }], genders: ['Male', 'Female'], base: true, locations: ['South Province (Area Three)', 'West Province (Area One)'] },
-        { id: 15, name: 'Lokix', types: ['Bug', 'Dark'], evolutions: [], genders: ['Male', 'Female'], locations: ['West Province (Area One)', 'West Province (Area Three)', 'East Province (Area Three)', 'North Province (Area One)', 'North Province (Area Two)'] },
-        // This would contain all 400 Pokémon
+        // (This would be filled with all 400 Pokémon)
     ],
     gyms: [
-        { name: 'Cortondo Gym', leader: 'Katy', type: 'Bug' },
-        { name: 'Artazon Gym', leader: 'Brassius', type: 'Grass' },
-        { name: 'Levincia Gym', leader: 'Iono', type: 'Electric' },
-        { name: 'Cascarrafa Gym', leader: 'Kofu', type: 'Water' },
-        { name: 'Medali Gym', leader: 'Larry', type: 'Normal' },
-        { name: 'Montenevera Gym', leader: 'Ryme', type: 'Ghost' },
-        { name: 'Alfornada Gym', leader: 'Tulip', type: 'Psychic' },
-        { name: 'Glaseado Gym', leader: 'Grusha', type: 'Ice' },
+        { name: 'Cortondo Gym', leader: 'Katy', type: 'Bug' }, { name: 'Artazon Gym', leader: 'Brassius', type: 'Grass' },
+        { name: 'Levincia Gym', leader: 'Iono', type: 'Electric' }, { name: 'Cascarrafa Gym', leader: 'Kofu', type: 'Water' },
+        { name: 'Medali Gym', leader: 'Larry', type: 'Normal' }, { name: 'Montenevera Gym', leader: 'Ryme', type: 'Ghost' },
+        { name: 'Alfornada Gym', leader: 'Tulip', type: 'Psychic' }, { name: 'Glaseado Gym', leader: 'Grusha', type: 'Ice' },
     ],
     tms: [
         { id: 1, name: "Take Down" }, { id: 2, name: "Charm" }, { id: 3, name: "Fake Tears" }, { id: 4, name: "Agility" }, { id: 5, name: "Mud-Slap" },
-        // This would contain all 171 TMs
+        // (This would be filled with all 171 TMs)
     ],
     items: [
         "Ability Shield", "Adamant Orb", "Aguav Berry", "Air Balloon", "Apicot Berry", "Armorite Ore", "Aspear Berry", "Assault Vest", "Auspicious Armor", "Babiri Berry", "Beast Ball", "Berry Sweet", "Big Root", "Binding Band", "Black Belt", "Black Glasses", "Black Sludge",
-        // This would contain a comprehensive item list
+        // (This would be a comprehensive item list)
     ],
     moves: [
         { name: "Pound", type: "Normal" }, { name: "Karate Chop", type: "Fighting" }, { name: "Double Slap", type: "Normal" }, { name: "Comet Punch", type: "Normal" }, { name: "Mega Punch", type: "Normal" }, { name: "Pay Day", type: "Normal" }, { name: "Fire Punch", type: "Fire" }, { name: "Ice Punch", type: "Ice" }, { name: "Thunder Punch", type: "Electric" }, { name: "Scratch", type: "Normal" }, { name: "Vise Grip", type: "Normal" }, { name: "Guillotine", type: "Normal" }, { name: "Razor Wind", type: "Normal" }, { name: "Swords Dance", type: "Normal" }, { name: "Cut", type: "Normal" },
-        // This would contain a comprehensive move list
+        // (This would be a comprehensive move list)
     ],
     sandwiches: [
         { name: "Jambon-Beurre" }, { name: "Classic Bocadillo" }, { name: "Marmalade Sandwich" }, { name: "Tropical Sandwich" }, { name: "Avocado Sandwich" }, { name: "Zesty Sandwich" },
-        // This would contain all 151 recipes
+        // (This would be filled with all 151 recipes)
     ]
 };
-
