@@ -15,7 +15,8 @@
     --border-dark: #3a3a3c; /* dark gray */
 
     --accent-blue: #007aff;
-    --danger-red: #ff3b30;
+    --accent-red: #ff3b30; /* Danger Red */
+    --accent-green: #34c759; /* Green */
 }
 
 body {
@@ -74,8 +75,9 @@ body.light-mode {
 .pokedex-item { background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 0.75rem; border: 1px solid var(--border-color); transition: all .2s ease-in-out; }
 .pokedex-status-icons { display: flex; gap: 0.5rem; align-items: center; }
 .status-icon { cursor: pointer; font-size: 1.25rem; color: var(--text-secondary); transition: all 0.2s ease-in-out; }
-.status-icon.active { color: var(--accent-blue); }
-.status-icon.caught.active { color: #34c759; }
+.status-icon.seen.active { color: var(--accent-blue); }
+.status-icon.battled.active { color: var(--accent-red); }
+.status-icon.caught.active { color: var(--accent-green); }
 
 /* --- Team Builder --- */
 .team-summary-card, .empty-team-slot {
@@ -100,9 +102,9 @@ body.light-mode {
 #modal-close-btn { font-size: 2.5rem; line-height: 1; border: none; background: none; font-weight: 300; }
 .save-button { background-color: var(--accent-blue); color: white; font-weight: 600; padding: 0.6rem 1.25rem; border-radius: 0.5rem; transition: all .2s; border: none; }
 .save-button:hover { filter: brightness(1.1); }
-.remove-button { background-color: var(--danger-red); color: white; font-weight: 600; padding: 0.6rem 1.25rem; border-radius: 0.5rem; transition: all .2s; border: none; }
+.remove-button { background-color: var(--accent-red); color: white; font-weight: 600; padding: 0.6rem 1.25rem; border-radius: 0.5rem; transition: all .2s; border: none; }
 .remove-button:hover { filter: brightness(1.1); }
-body.light-mode .remove-button { background-color: #ffe5e5; color: var(--danger-red); }
+body.light-mode .remove-button { background-color: #ffe5e5; color: var(--accent-red); }
 body.light-mode .remove-button:hover { background-color: #ffdbdb; }
 
 /* --- Form Inputs --- */
@@ -113,3 +115,4 @@ body.light-mode .remove-button:hover { background-color: #ffdbdb; }
 }
 .form-input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); }
 .form-input-sm { padding: 0.4rem; }
+
