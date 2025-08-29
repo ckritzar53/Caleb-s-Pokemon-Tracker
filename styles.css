@@ -72,15 +72,13 @@ body {
 /* --- Pokémon Editor Modal --- */
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .modal-content { background-color: var(--bg-secondary); border-radius: 0.75rem; border: 1px solid var(--border-color); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; }
-.modal-content > div { flex-shrink: 0; }
-.modal-content .p-4 { overflow-y: auto; }
 .modal-tab { padding: 0.5rem 0.25rem; border-bottom: 2px solid transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: all .2s; }
 .modal-tab.active, .modal-tab:hover { color: var(--accent-secondary); }
 .modal-tab.active { border-color: var(--accent-secondary); }
 .modal-tab-pane { display: none; animation: fadeIn 0.3s ease; }
 .modal-tab-pane.active { display: block; }
 #modal-close-btn { font-size: 2.5rem; line-height: 1; border: none; background: none; font-weight: 300; }
-.save-button { background: linear-gradient(to right, var(--accent-secondary), var(--accent-primary)); color: white; font-bold: 600; padding: 0.6rem 1.25rem; border-radius: 0.5rem; transition: all .2s; }
+.save-button { background: linear-gradient(to right, var(--accent-secondary), var(--accent-primary)); color: white; font-weight: 600; padding: 0.6rem 1.25rem; border-radius: 0.5rem; transition: all .2s; }
 .save-button:hover { box-shadow: 0 4px 10px -2px rgba(168, 85, 247, 0.4); transform: translateY(-2px); }
 
 /* --- Form Inputs --- */
@@ -95,3 +93,4 @@ body {
     box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent-primary);
 }
 .form-input-sm { padding: 0.4rem; }
+
