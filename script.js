@@ -27,12 +27,24 @@ document.addEventListener('DOMContentLoaded', () => {
             orderHistory: [[ { name: '8 Corner Pizza®', price: 17.99, type: 'pizza', toppings: { Pepperoni: 'whole' } }, { name: 'Jet Bread®', price: 7.99, type: 'side', requiresSauce: true, sauce: 'Ranch' } ]]
         }
     };
+    
     const menuData = {
-        'Specialty Pizzas': [ { name: 'All Meaty®', price: 21.99, type: 'pizza' }, { name: 'Jet 10®', price: 21.99, type: 'pizza' }, { name: 'Aloha BBQ Chicken', price: 19.99, type: 'pizza' }, { name: '8 Corner Pizza®', price: 17.99, type: 'pizza' } ],
-        'Deep Dish Bread': [ { name: 'Jet Bread®', price: 7.99, type: 'side', requiresSauce: true }, { name: 'Deep Dish Bread', price: 6.99, type: 'side', requiresSauce: true }, { name: 'Triple Cheesy Bread', price: 9.99, type: 'side', requiresSauce: true } ],
-        'Wings & Chicken': [ { name: 'Boneless Chicken (10)', price: 11.99, type: 'side' }, { name: 'Jet\'s Wings® (8)', price: 10.99, type: 'side' } ],
-        'Sides & Desserts': [ { name: 'Side Salad', price: 5.49, type: 'side' }, { name: 'Cinnamon Stix', price: 6.99, type: 'dessert' } ],
-        'Beverages': [ { name: '2L Soda', price: 3.29, type: 'drink' }, { name: 'Water Bottle', price: 1.99, type: 'drink' } ],
+        'Specialty Pizzas': {
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/><path d="M5.5 11.5L8.5 14.5L12.5 10.5L15.5 13.5L18.5 10.5"/></svg>`,
+            items: [ { name: 'All Meaty®', price: 21.99, type: 'pizza' }, { name: 'Jet 10®', price: 21.99, type: 'pizza' }, { name: 'Aloha BBQ Chicken', price: 19.99, type: 'pizza' }, { name: '8 Corner Pizza®', price: 17.99, type: 'pizza' } ],
+        },
+        'Deep Dish Bread': {
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+            items: [ { name: 'Jet Bread®', price: 7.99, type: 'side', requiresSauce: true }, { name: 'Deep Dish Bread', price: 6.99, type: 'side', requiresSauce: true }, { name: 'Triple Cheesy Bread', price: 9.99, type: 'side', requiresSauce: true } ],
+        },
+        'Wings & Chicken': {
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`,
+            items: [ { name: 'Boneless Chicken (10)', price: 11.99, type: 'side' }, { name: 'Jet\'s Wings® (8)', price: 10.99, type: 'side' } ],
+        },
+        'Beverages': {
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10m-5-5h10"/><path d="m12 12-3.5 9h7L12 12z"/></svg>`,
+            items: [ { name: '2L Soda', price: 3.29, type: 'drink' }, { name: 'Water Bottle', price: 1.99, type: 'drink' } ],
+        }
     };
     const toppingsData = ['Pepperoni', 'Mushrooms', 'Onions', 'Sausage', 'Bacon', 'Green Peppers', 'Black Olives', 'Pineapple', 'Jalapeños', 'Ham', 'Chicken', 'Extra Cheese'];
     const sauceData = ['Pizza Sauce', 'Ranch', 'Garlic Butter', 'Blue Cheese'];
@@ -42,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const render = (el, content) => el.innerHTML = content;
     const formatCurrency = (amount) => `$${amount.toFixed(2)}`;
     
-    function renderCategories() { allElements.categoryNav.innerHTML = Object.keys(menuData).map(cat => `<button class="category-btn ${cat === activeCategory ? 'active' : ''}">${cat}</button>`).join(''); }
-    function renderMenuItems() { allElements.menuItemsContainer.innerHTML = menuData[activeCategory].map(item => `<button class="menu-item-btn" data-name="${item.name}"><p class="font-semibold text-white">${item.name}</p><p class="text-sm text-slate-400">${formatCurrency(item.price)}</p></button>`).join(''); }
+    function renderCategories() { allElements.categoryNav.innerHTML = Object.keys(menuData).map(cat => `<button class="category-btn ${cat === activeCategory ? 'active' : ''}" data-category="${cat}">${menuData[cat].icon}<span>${cat}</span></button>`).join(''); }
+    function renderMenuItems() { allElements.menuItemsContainer.innerHTML = menuData[activeCategory].items.map(item => `<button class="menu-item-btn" data-name="${item.name}"><p class="font-semibold text-white">${item.name}</p><p class="text-sm text-slate-400">${formatCurrency(item.price)}</p></button>`).join(''); allElements.menuItemsContainer.querySelectorAll('.menu-item-btn').forEach(btn => btn.disabled = !currentCustomer); }
     function renderDeliveryZones() { allElements.deliveryZoneButtonsContainer.innerHTML = deliveryZones.map(zone => `<button class="delivery-zone-btn" data-fee="${zone.fee}">${zone.name}</button>`).join(''); }
 
     function renderOrder() {
@@ -110,33 +122,21 @@ document.addEventListener('DOMContentLoaded', () => {
         allElements.lastOrderItemsContainer.innerHTML = lastOrder.map((item, index) => `<label class="recall-item"><input type="checkbox" class="recall-checkbox" data-index="${index}"><span>${item.name} <span class="text-slate-400 text-xs">(${formatCurrency(item.price)})</span></span></label>`).join('');
     }
 
-    function handleSaveCustomer(e) {
-        e.preventDefault();
-        const newCustomerData = { phone: currentCustomer.phone, firstName: document.getElementById('cust-first-name').value, lastName: document.getElementById('cust-last-name').value, address: { street: document.getElementById('cust-street').value, apt: document.getElementById('cust-apt').value, city: document.getElementById('cust-city').value, zip: document.getElementById('cust-zip').value, }, orderHistory: currentCustomer.orderHistory || [] };
-        customers[currentCustomer.phone] = newCustomerData;
-        currentCustomer = newCustomerData;
-        startOrderForCustomer();
-    }
-
-    function handleRecallSelected() {
-        const lastOrder = currentCustomer.orderHistory[0];
-        const selectedItems = Array.from(allElements.lastOrderItemsContainer.querySelectorAll('.recall-checkbox:checked')).map(checkbox => JSON.parse(JSON.stringify(lastOrder[checkbox.dataset.index])));
-        currentOrder = [...selectedItems];
-        startOrderForCustomer();
-    }
+    function handleSaveCustomer(e) { e.preventDefault(); const newCustomerData = { phone: currentCustomer.phone, firstName: document.getElementById('cust-first-name').value, lastName: document.getElementById('cust-last-name').value, address: { street: document.getElementById('cust-street').value, apt: document.getElementById('cust-apt').value, city: document.getElementById('cust-city').value, zip: document.getElementById('cust-zip').value, }, orderHistory: currentCustomer.orderHistory || [] }; customers[currentCustomer.phone] = newCustomerData; currentCustomer = newCustomerData; startOrderForCustomer(); }
+    function handleRecallSelected() { const lastOrder = currentCustomer.orderHistory[0]; const selectedItems = Array.from(allElements.lastOrderItemsContainer.querySelectorAll('.recall-checkbox:checked')).map(checkbox => JSON.parse(JSON.stringify(lastOrder[checkbox.dataset.index]))); currentOrder = [...selectedItems]; startOrderForCustomer(); }
 
     function startOrderForCustomer() {
         allElements.customerInfoModal.classList.add('hidden');
         render(allElements.customerHeaderName, `${currentCustomer.firstName} ${currentCustomer.lastName}`);
-        render(allElements.customerHeaderPhone, currentCustomer.phone);
+        render(allElements.customerHeaderPhone, `(${currentCustomer.phone.slice(0,3)}) ${currentCustomer.phone.slice(3,6)}-${currentCustomer.phone.slice(6)}`);
         allElements.customerHeader.classList.remove('hidden');
         allElements.sendOrderBtn.disabled = false;
-        allElements.menuItemsContainer.querySelectorAll('.menu-item-btn').forEach(btn => btn.disabled = false);
+        renderMenuItems();
         renderOrder();
     }
     
     // --- MODALS (PIZZA/SAUCE) ---
-    function openPizzaModal() { render(allElements.modalPizzaName, `Customize ${pizzaToCustomize.name}`); allElements.toppingsGrid.innerHTML = toppingsData.map(t => `<div class="bg-slate-700 rounded-md p-2 flex flex-col items-center"><p class="font-semibold text-center mb-2">${t}</p><div class="grid grid-cols-3 gap-1 w-full text-xs"><button class="topping-option-btn rounded-l-md py-1.5" data-topping="${t}" data-placement="left">Left</button><button class="topping-option-btn py-1.5" data-topping="${t}" data-placement="whole">Whole</button><button class="topping-option-btn rounded-r-md py-1.5" data-topping="${t}" data-placement="right">Right</button></div><button class="w-full mt-1.5 py-1.5 text-xs bg-slate-600 rounded-md topping-option-btn extra" data-topping="${t}" data-placement="extra">Extra</button></div>`).join(''); allElements.pizzaModal.classList.remove('hidden'); }
+    function openPizzaModal() { render(allElements.modalPizzaName, `Customize ${pizzaToCustomize.name}`); allElements.toppingsGrid.innerHTML = toppingsData.map(t => `<div class="bg-slate-700/50 rounded-md p-2 flex flex-col items-center"><p class="font-semibold text-center mb-2">${t}</p><div class="grid grid-cols-3 gap-1 w-full text-xs"><button class="topping-option-btn rounded-l-md py-1.5" data-topping="${t}" data-placement="left">Left</button><button class="topping-option-btn py-1.5" data-topping="${t}" data-placement="whole">Whole</button><button class="topping-option-btn rounded-r-md py-1.5" data-topping="${t}" data-placement="right">Right</button></div><button class="w-full mt-1.5 py-1.5 text-xs bg-slate-600 rounded-md topping-option-btn extra" data-topping="${t}" data-placement="extra">Extra</button></div>`).join(''); allElements.pizzaModal.classList.remove('hidden'); }
     function closePizzaModal() { pizzaToCustomize = null; allElements.pizzaModal.classList.add('hidden'); }
     function openSauceModal() { render(allElements.modalSauceItemName, `Choose Sauce for ${itemToSauce.name}`); allElements.sauceOptionsContainer.innerHTML = sauceData.map(sauce => `<button class="sauce-option-btn w-full" data-sauce="${sauce}">${sauce}</button>`).join(''); allElements.sauceModal.classList.remove('hidden'); }
     function closeSauceModal() { itemToSauce = null; allElements.sauceModal.classList.add('hidden'); }
@@ -147,16 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
         allElements.customerForm.onsubmit = handleSaveCustomer;
         allElements.recallSelectedBtn.onclick = handleRecallSelected;
         allElements.startNewOrderBtn.onclick = startOrderForCustomer;
-        allElements.changeCustomerBtn.onclick = () => {
-            currentOrder = []; currentCustomer = null; deliveryFee = 0; renderOrder();
-            allElements.customerHeader.classList.add('hidden');
-            allElements.sendOrderBtn.disabled = true;
-            allElements.menuItemsContainer.querySelectorAll('.menu-item-btn').forEach(btn => btn.disabled = true);
-            showCustomerLookup();
-        };
+        allElements.changeCustomerBtn.onclick = () => { currentOrder = []; currentCustomer = null; deliveryFee = 0; renderOrder(); allElements.customerHeader.classList.add('hidden'); allElements.sendOrderBtn.disabled = true; renderMenuItems(); showCustomerLookup(); };
 
-        allElements.categoryNav.addEventListener('click', (e) => { if(e.target.classList.contains('category-btn')) { activeCategory = e.target.textContent; renderCategories(); renderMenuItems(); } });
-        allElements.menuItemsContainer.addEventListener('click', (e) => { const btn = e.target.closest('.menu-item-btn'); if(btn) { const item = menuData[activeCategory].find(i => i.name === btn.dataset.name); if(item.type === 'pizza') { pizzaToCustomize = { ...item, id: Date.now(), toppings: {} }; openPizzaModal(); } else if (item.requiresSauce) { itemToSauce = { ...item, id: Date.now() }; openSauceModal(); } else { currentOrder.push({ ...item, id: Date.now() }); renderOrder(); } } });
+        allElements.categoryNav.addEventListener('click', (e) => { const btn = e.target.closest('.category-btn'); if(btn) { activeCategory = btn.dataset.category; renderCategories(); renderMenuItems(); } });
+        allElements.menuItemsContainer.addEventListener('click', (e) => { const btn = e.target.closest('.menu-item-btn'); if(btn) { const item = menuData[activeCategory].items.find(i => i.name === btn.dataset.name); if(item.type === 'pizza') { pizzaToCustomize = { ...item, id: Date.now(), toppings: {} }; openPizzaModal(); } else if (item.requiresSauce) { itemToSauce = { ...item, id: Date.now() }; openSauceModal(); } else { currentOrder.push({ ...item, id: Date.now() }); renderOrder(); } } });
         allElements.toppingsGrid.addEventListener('click', (e) => { const btn = e.target; if (btn.classList.contains('topping-option-btn')) { const { topping, placement } = btn.dataset; const toppingOptions = allElements.toppingsGrid.querySelectorAll(`[data-topping="${topping}"]`); const current = pizzaToCustomize.toppings[topping]; toppingOptions.forEach(b => b.classList.remove('active')); if (current !== placement) { btn.classList.add('active'); pizzaToCustomize.toppings[topping] = placement; } else { delete pizzaToCustomize.toppings[topping]; } } });
         allElements.sauceOptionsContainer.addEventListener('click', (e) => { const btn = e.target; if (btn.classList.contains('sauce-option-btn')) { itemToSauce.sauce = btn.dataset.sauce; currentOrder.push(itemToSauce); renderOrder(); closeSauceModal(); } });
         allElements.deliveryZoneButtonsContainer.addEventListener('click', (e) => { const btn = e.target; if(btn.classList.contains('delivery-zone-btn')) { allElements.deliveryZoneButtonsContainer.querySelectorAll('.delivery-zone-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); deliveryFee = parseFloat(btn.dataset.fee); calculateTotals(); } });
@@ -180,8 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         updateClocks(); setInterval(updateClocks, 1000);
         renderCategories(); renderMenuItems(); renderDeliveryZones(); renderOrder();
-        allElements.menuItemsContainer.querySelectorAll('.menu-item-btn').forEach(btn => btn.disabled = true);
-        allElements.sendOrderBtn.disabled = true;
         setupEventListeners();
         showCustomerLookup();
     }
