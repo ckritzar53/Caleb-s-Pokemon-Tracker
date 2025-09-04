@@ -16,14 +16,15 @@ body {
 .category-btn.active { color: #4fd1c5; border-bottom: 2px solid #4fd1c5; border-radius: 6px 6px 0 0; }
 
 .menu-item-btn { background-color: #2d3748; border-radius: 8px; padding: 12px; text-align: center; transition: all 0.2s ease-in-out; border: 1px solid #4A5568; }
-.menu-item-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0, 255, 255, 0.1); border-color: #4fd1c5; }
+.menu-item-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0, 255, 255, 0.1); border-color: #4fd1c5; }
+.menu-item-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .order-type-btn, .delivery-zone-btn, .sauce-option-btn { padding: 10px; border-radius: 6px; font-weight: 600; background-color: #2d3748; color: #a0aec0; border: 1px solid #4A5568; transition: all 0.2s ease; }
 .order-type-btn.active, .delivery-zone-btn.active, .sauce-option-btn:hover { background-color: #4fd1c5; color: #1a202c; border-color: #4fd1c5; }
 
 /* Modals */
-.modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.3s ease; }
-.modal-content-lg { background-color: #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 90%; max-width: 56rem; height: 90%; display: flex; flex-direction: column; border: 1px solid #4A5568; animation: scaleIn 0.3s ease; }
+.modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.3s ease; z-index: 40; }
+.modal-content-lg { background-color: #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 90%; max-width: 56rem; height: 90%; display: flex; flex-direction: column; border: 1px solid #4A5568; animation: scaleIn 0.3s ease; max-height: 700px; }
 .modal-content-sm { background-color: #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 90%; max-width: 24rem; display: flex; flex-direction: column; border: 1px solid #4A5568; animation: scaleIn 0.3s ease; }
 .modal-header { padding: 1rem; border-bottom: 1px solid #4A5568; font-size: 1.25rem; font-weight: 700; }
 .modal-footer { padding: 1rem; display: flex; justify-content: flex-end; gap: 0.75rem; background-color: rgba(15, 23, 42, 0.5); border-top: 1px solid #4A5568; }
@@ -33,6 +34,15 @@ body {
 .btn-secondary { padding: 0.5rem 1.5rem; background-color: #4A5568; color: white; border-radius: 6px; font-weight: 600; transition: background-color 0.2s; }
 .btn-secondary:hover { background-color: #718096; }
 
+/* Customer Form Fields */
+.input-label { display: block; font-size: 0.75rem; font-weight: 600; color: #a0aec0; margin-bottom: 0.25rem; }
+.input-field { width: 100%; background-color: #4A5568; border: 1px solid #718096; border-radius: 6px; padding: 0.5rem 0.75rem; color: white; transition: all 0.2s ease; }
+.input-field:focus { outline: none; border-color: #4fd1c5; box-shadow: 0 0 0 2px rgba(79, 209, 197, 0.3); }
+
+/* Recall Order Item */
+.recall-item { display: flex; align-items: center; padding: 0.5rem; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; }
+.recall-item:hover { background-color: #4A556860; }
+.recall-item input[type="checkbox"] { width: 1.25rem; height: 1.25rem; margin-right: 0.75rem; accent-color: #4fd1c5; }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
