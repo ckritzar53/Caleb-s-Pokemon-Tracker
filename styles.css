@@ -1,54 +1,102 @@
-/* Using a more common font for web compatibility */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for a more native POS feel */
+/* Custom scrollbar for a sleek look */
 ::-webkit-scrollbar {
     width: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #4A5568; /* slate-600 */
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #718096; /* slate-500 */
 }
 
-/* Custom wave gradient from the reference image */
-.pos-main-bg {
-    background-image: radial-gradient(ellipse at 50% 150%, #F5F5F5 0%, transparent 60%);
-}
-
-.nav-btn {
-    width: 100%;
-    padding: 1.1rem 1.25rem;
-    background-color: #E6E7E9;
-    border: none;
-    border-bottom: 1px solid #C5C6C8;
-    font-size: 0.9rem;
+/* Category Navigation Buttons */
+.category-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 600;
-    color: #555;
-    cursor: pointer;
-    text-align: left;
+    color: #a0aec0; /* slate-400 */
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+.category-btn:hover {
+    color: #ffffff;
+    background-color: #4A556830; /* slate-600 with opacity */
+}
+.category-btn.active {
+    color: #4fd1c5; /* cyan-400 */
+    border-bottom: 2px solid #4fd1c5;
+    border-radius: 6px 6px 0 0;
+}
+
+
+/* Menu Item Styling */
+.menu-item-btn {
+    background-color: #2d3748; /* slate-800 */
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #4A5568; /* slate-700 */
+}
+.menu-item-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.1);
+    border-color: #4fd1c5; /* cyan-400 */
+}
+
+/* Order Type Buttons */
+.order-type-btn {
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    background-color: #2d3748; /* slate-800 */
+    color: #a0aec0; /* slate-400 */
+    border: 1px solid #4A5568; /* slate-700 */
     transition: all 0.2s ease;
 }
-.nav-btn:hover {
-    background-color: #f0f0f0;
+.order-type-btn.active {
+    background-color: #4fd1c5; /* cyan-400 */
+    color: #1a202c; /* slate-900 */
+    border-color: #4fd1c5;
 }
-.nav-btn.active {
-    background-color: #fff;
-    color: #000;
-}
-.screen {
-    animation: fadeIn 0.3s ease-in-out;
+
+/* Modal Animation */
+#pizza-modal {
+    animation: fadeIn 0.3s ease;
 }
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+#pizza-modal > div {
+    animation: scaleIn 0.3s ease;
+}
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Topping Button Styling */
+.topping-option-btn {
+    background-color: #4A5568; /* slate-600 */
+    transition: background-color 0.2s;
+}
+.topping-option-btn.active {
+    background-color: #38b2ac; /* teal-500 */
+    font-weight: 700;
+}
+.topping-option-btn.extra.active {
+     background-color: #dd6b20; /* orange-600 */
+}
+
