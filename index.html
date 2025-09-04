@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Pizza POS</title>
+    <title>Professional Pizza POS</title>
     <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,64 +15,48 @@
 <body class="bg-gray-900 flex items-center justify-center min-h-screen text-white/90">
 
     <!-- POS Terminal -->
-    <div id="pos-terminal" class="w-full max-w-7xl h-[800px] bg-slate-800 rounded-lg shadow-2xl flex overflow-hidden border border-slate-700">
+    <div id="pos-terminal" class="w-full max-w-7xl h-[800px] bg-slate-800 rounded-lg shadow-2xl flex overflow-hidden border border-slate-700 relative">
 
         <!-- Main Content (Menu & Ticket) -->
         <main class="flex flex-1">
             <!-- Left Panel: Menu & Categories -->
             <div class="w-2/3 flex flex-col p-4">
-                <!-- Header -->
-                <header class="flex justify-between items-center mb-4 flex-shrink-0">
-                    <div>
-                        <h1 class="text-3xl font-bold text-white">JET'S PIZZA</h1>
-                        <p class="text-sm text-cyan-400" id="current-time"></p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-semibold text-gray-400">PICKUP TIME</p>
-                        <p class="text-lg font-bold text-white" id="pickup-time">--:-- PM</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-semibold text-gray-400">DELIVERY TIME</p>
-                        <p class="text-lg font-bold text-white" id="delivery-time">--:-- PM</p>
-                    </div>
+                 <!-- Header -->
+                 <header class="flex justify-between items-center mb-4 flex-shrink-0">
+                    <div><h1 class="text-3xl font-bold text-white">JET'S PIZZA</h1><p class="text-sm text-cyan-400" id="current-time"></p></div>
+                    <div class="text-right"><p class="text-sm font-semibold text-gray-400">PICKUP TIME</p><p class="text-lg font-bold text-white" id="pickup-time">--:-- PM</p></div>
+                    <div class="text-right"><p class="text-sm font-semibold text-gray-400">DELIVERY TIME</p><p class="text-lg font-bold text-white" id="delivery-time">--:-- PM</p></div>
                 </header>
-
                 <!-- Categories -->
-                <nav id="category-nav" class="flex space-x-2 mb-4 border-b border-slate-700 flex-shrink-0">
-                    <!-- Categories will be injected here -->
-                </nav>
-
+                <nav id="category-nav" class="flex space-x-2 mb-4 border-b border-slate-700 flex-shrink-0"></nav>
                 <!-- Menu Items Grid -->
-                <div id="menu-items" class="flex-1 grid grid-cols-4 gap-3 overflow-y-auto pr-2">
-                    <!-- Menu items will be injected here -->
-                </div>
+                <div id="menu-items" class="flex-1 grid grid-cols-4 gap-3 overflow-y-auto pr-2"></div>
             </div>
 
             <!-- Right Panel: Order Ticket -->
             <div class="w-1/3 bg-slate-900 flex flex-col p-4 border-l border-slate-700">
-                <!-- Customer & Order Type -->
-                <div class="flex-shrink-0">
-                    <h2 class="text-xl font-bold mb-2">Current Order</h2>
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <button id="carryout-btn" class="order-type-btn active">CARRY-OUT</button>
-                        <button id="delivery-btn" class="order-type-btn">DELIVERY</button>
+                <!-- Customer Info Header -->
+                <div id="customer-header" class="hidden flex-shrink-0 mb-2 p-2 bg-slate-800 rounded-md">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p id="customer-header-name" class="font-bold"></p>
+                            <p id="customer-header-phone" class="text-sm text-slate-400"></p>
+                        </div>
+                        <button id="change-customer-btn" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold">Change</button>
                     </div>
-                    <input type="text" id="customer-name" placeholder="Enter Customer Name" class="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                 </div>
-
-                <!-- Delivery Zone Section (Initially Hidden) -->
-                <div id="delivery-zone-section" class="hidden flex-shrink-0 mt-3">
+                <!-- Order Type -->
+                <div class="grid grid-cols-2 gap-2 mb-3 flex-shrink-0">
+                    <button id="carryout-btn" class="order-type-btn active">CARRY-OUT</button>
+                    <button id="delivery-btn" class="order-type-btn">DELIVERY</button>
+                </div>
+                 <!-- Delivery Zone Section (Initially Hidden) -->
+                 <div id="delivery-zone-section" class="hidden flex-shrink-0">
                     <h3 class="text-sm font-semibold mb-2 text-slate-400">DELIVERY ZONE</h3>
-                    <div id="delivery-zone-buttons" class="grid grid-cols-3 gap-2">
-                        <!-- Delivery zone buttons injected here -->
-                    </div>
+                    <div id="delivery-zone-buttons" class="grid grid-cols-3 gap-2"></div>
                 </div>
-
                 <!-- Order Items -->
-                <div id="order-items" class="flex-1 my-3 overflow-y-auto border-y border-slate-700 py-2">
-                    <p class="text-slate-500 text-center py-8">Select items to start an order</p>
-                </div>
-
+                <div id="order-items" class="flex-1 my-3 overflow-y-auto border-y border-slate-700 py-2"></div>
                 <!-- Totals & Checkout -->
                 <div class="flex-shrink-0">
                     <div class="space-y-1 text-sm">
@@ -81,19 +65,61 @@
                         <div class="flex justify-between text-slate-400"><span>Delivery Fee</span><span id="order-delivery-fee">$0.00</span></div>
                         <div class="flex justify-between text-lg font-bold mt-1 border-t border-slate-700 pt-2"><span>Total</span><span id="order-total">$0.00</span></div>
                     </div>
-                    <button id="send-order-btn" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3.5 rounded-md mt-4 transition-colors text-lg">PAY $0.00</button>
+                    <button id="send-order-btn" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3.5 rounded-md mt-4 transition-colors text-lg" disabled>PAY $0.00</button>
                 </div>
             </div>
         </main>
+        
+        <!-- CUSTOMER LOOKUP OVERLAY -->
+        <div id="customer-lookup-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-50">
+            <div class="bg-slate-800 p-8 rounded-lg shadow-2xl border border-slate-700 text-center">
+                <h2 class="text-2xl font-bold mb-4">Customer Lookup</h2>
+                <p class="text-slate-400 mb-6">Enter phone number to start a new order.</p>
+                <input type="tel" id="phone-lookup-input" placeholder="(---) --- ----" class="w-80 text-center text-2xl bg-slate-700 border border-slate-600 rounded-md px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <button id="phone-lookup-btn" class="w-80 mt-4 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3.5 rounded-md text-lg transition-colors">Find Customer</button>
+            </div>
+        </div>
+
+        <!-- CUSTOMER INFO MODAL -->
+        <div id="customer-info-modal" class="modal-overlay hidden">
+            <div class="modal-content-lg flex">
+                <!-- Left: Form -->
+                <div class="w-1/2 p-6 border-r border-slate-700">
+                    <h2 id="customer-modal-title" class="text-2xl font-bold mb-4">New Customer</h2>
+                    <form id="customer-form" class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label class="input-label">First Name</label><input type="text" id="cust-first-name" class="input-field" required></div>
+                            <div><label class="input-label">Last Name</label><input type="text" id="cust-last-name" class="input-field" required></div>
+                        </div>
+                        <div><label class="input-label">Street Address</label><input type="text" id="cust-street" class="input-field" required></div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div><label class="input-label">Apt # (Optional)</label><input type="text" id="cust-apt" class="input-field"></div>
+                            <div><label class="input-label">City</label><input type="text" id="cust-city" class="input-field" required></div>
+                            <div><label class="input-label">Zip Code</label><input type="text" id="cust-zip" class="input-field" required></div>
+                        </div>
+                        <button type="submit" id="save-customer-btn" class="w-full mt-4 btn-primary py-3">Save & Start Order</button>
+                    </form>
+                </div>
+                <!-- Right: Last Order -->
+                <div id="last-order-section" class="w-1/2 p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2 text-slate-300">Last Order</h3>
+                    <div id="last-order-items" class="flex-1 overflow-y-auto border-y border-slate-700 py-2">
+                        <p class="text-slate-500 text-center py-8">No previous order found.</p>
+                    </div>
+                    <div class="mt-auto pt-4 flex space-x-3">
+                        <button id="recall-selected-btn" class="flex-1 btn-secondary">Recall Selected</button>
+                        <button id="start-new-order-btn" class="flex-1 btn-primary">Start New Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Pizza Customization Modal -->
+    <!-- Modals (Pizza, Sauce) -->
     <div id="pizza-modal" class="modal-overlay hidden"><div class="modal-content-lg"><header class="modal-header"><h2 id="modal-pizza-name"></h2></header><div class="flex-1 p-4 overflow-y-auto" id="toppings-grid"></div><footer class="modal-footer"><button id="cancel-pizza-btn" class="btn-secondary">Cancel</button><button id="add-pizza-btn" class="btn-primary">Add to Order</button></footer></div></div>
-    
-    <!-- Sauce Selection Modal -->
     <div id="sauce-modal" class="modal-overlay hidden"><div class="modal-content-sm"><header class="modal-header"><h2 id="modal-sauce-item-name"></h2></header><div class="p-4 flex flex-col space-y-2" id="sauce-options"></div></div></div>
     
-    <!-- Custom Logic Script -->
     <script src="script.js"></script>
 </body>
 </html>
