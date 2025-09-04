@@ -3,86 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jet's Pizza POS Simulation</title>
+    <title>Modern Pizza POS</title>
     <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-800 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-900 flex items-center justify-center min-h-screen text-white/90">
 
-    <!-- POS Terminal Container -->
-    <div id="pos-terminal" class="w-full max-w-6xl h-[700px] bg-[#3a3f44] border-8 border-[#3a3f44] rounded-lg shadow-2xl flex flex-col overflow-hidden">
+    <!-- POS Terminal -->
+    <div id="pos-terminal" class="w-full max-w-7xl h-[800px] bg-slate-800 rounded-lg shadow-2xl flex overflow-hidden border border-slate-700">
 
-        <!-- Header -->
-        <header class="bg-[#E6E7E9] text-[#888] text-xs px-4 py-1.5 border-b border-[#d1d1d1] flex justify-between items-center">
-            <span id="terminal-id">L-1257-2A</span>
-            <span>Database: v2.11</span>
-            <span id="current-time"></span>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="flex flex-1 overflow-hidden">
-            <!-- Side Menu -->
-            <nav class="w-48 bg-[#D8DADC] border-r border-[#c5c5c5] flex-shrink-0">
-                <ul class="flex flex-col h-full">
-                    <li><button data-screen="logout" class="nav-btn">LOGOUT</button></li>
-                    <li><button data-screen="table" class="nav-btn">TABLE</button></li>
-                    <li><button data-screen="customer" class="nav-btn">CUSTOMER</button></li>
-                    <li><button data-screen="tickets" class="nav-btn">TICKETS</button></li>
-                    <li><button data-screen="menu" class="nav-btn">MENU</button></li>
-                    <li><button data-screen="dispatch" class="nav-btn">DISPATCH</button></li>
-                    <li><button data-screen="user" class="nav-btn active">USER</button></li>
-                    <li class="mt-auto"><button data-screen="full-review" class="nav-btn">FULL REVIEW</button></li>
-                </ul>
-            </nav>
-
-            <!-- Screen Content -->
-            <div class="flex-1 flex bg-[#E6E7E9] pos-main-bg">
-                <!-- USER/IDLE Screen -->
-                <section id="user-screen" class="screen active p-6 flex flex-col justify-center items-center w-full relative">
-                    <img src="https://i.imgur.com/G42P02H.png" alt="Jet's Pizza Logo" class="max-w-md">
-                     <div class="absolute bottom-4 right-6 text-gray-500 font-bold text-lg tracking-wider">
-                        SPEEDLINE
+        <!-- Main Content (Menu & Ticket) -->
+        <main class="flex flex-1">
+            <!-- Left Panel: Menu & Categories -->
+            <div class="w-2/3 flex flex-col p-4">
+                <!-- Header -->
+                <header class="flex justify-between items-center mb-4">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white">JET'S PIZZA</h1>
+                        <p class="text-sm text-cyan-400" id="current-time"></p>
                     </div>
-                </section>
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-400">PICKUP TIME</p>
+                        <p class="text-lg font-bold text-white" id="pickup-time">--:-- PM</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-400">DELIVERY TIME</p>
+                        <p class="text-lg font-bold text-white" id="delivery-time">--:-- PM</p>
+                    </div>
+                </header>
 
-                <!-- MENU Screen -->
-                <section id="menu-screen" class="screen hidden w-full h-full flex">
-                    <div class="w-2/3 p-4 flex flex-col">
-                        <div class="mb-4">
-                            <h2 class="text-2xl font-bold text-gray-800">Menu</h2>
-                        </div>
-                        <div id="menu-items" class="grid grid-cols-3 gap-3 overflow-y-auto flex-1">
-                            <!-- Menu items will be injected here by JS -->
-                        </div>
+                <!-- Categories -->
+                <nav id="category-nav" class="flex space-x-2 mb-4 border-b border-slate-700">
+                    <!-- Categories will be injected here -->
+                </nav>
+
+                <!-- Menu Items Grid -->
+                <div id="menu-items" class="flex-1 grid grid-cols-4 gap-3 overflow-y-auto pr-2">
+                    <!-- Menu items will be injected here -->
+                </div>
+            </div>
+
+            <!-- Right Panel: Order Ticket -->
+            <div class="w-1/3 bg-slate-900 flex flex-col p-4 border-l border-slate-700">
+                <!-- Customer & Order Type -->
+                <div class="flex-shrink-0">
+                    <h2 class="text-xl font-bold mb-2">Current Order</h2>
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                        <button id="carryout-btn" class="order-type-btn active">CARRY-OUT</button>
+                        <button id="delivery-btn" class="order-type-btn">DELIVERY</button>
                     </div>
-                    <div class="w-1/3 bg-white border-l border-gray-300 p-4 flex flex-col">
-                        <h3 class="text-xl font-bold border-b pb-2 mb-3">Current Order</h3>
-                        <div id="order-items" class="flex-1 overflow-y-auto">
-                           <p class="text-gray-500 text-center mt-8">Add items from the menu.</p>
-                        </div>
-                        <div class="border-t pt-3 mt-auto">
-                            <div class="flex justify-between font-bold text-lg">
-                                <span>Total:</span>
-                                <span id="order-total">$0.00</span>
-                            </div>
-                            <button class="w-full bg-green-600 text-white font-bold py-3 rounded-md mt-3 hover:bg-green-700 transition-colors">Checkout</button>
-                        </div>
+                    <input type="text" id="customer-name" placeholder="Enter Customer Name" class="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <!-- Order Items -->
+                <div id="order-items" class="flex-1 my-3 overflow-y-auto border-y border-slate-700 py-2">
+                    <p class="text-slate-500 text-center py-8">Select items to start an order</p>
+                </div>
+
+                <!-- Totals & Checkout -->
+                <div class="flex-shrink-0">
+                    <div class="space-y-1 text-sm">
+                        <div class="flex justify-between"><span>Subtotal</span><span id="order-subtotal">$0.00</span></div>
+                        <div class="flex justify-between"><span>Tax</span><span id="order-tax">$0.00</span></div>
+                        <div class="flex justify-between text-lg font-bold"><span>Total</span><span id="order-total">$0.00</span></div>
                     </div>
-                </section>
-                 <!-- Other Screens Placeholder -->
-                <section id="logout-screen" class="screen hidden p-6 w-full"><h1 class="text-3xl font-bold">Logout Screen</h1></section>
-                <section id="table-screen" class="screen hidden p-6 w-full"><h1 class="text-3xl font-bold">Table Management</h1></section>
-                <section id="customer-screen" class="screen hidden p-6 w-full"><h1 class="text-3xl font-bold">Customer Lookup</h1></section>
-                <section id="tickets-screen" class="screen hidden p-6 w-full"><h1 class="text-3xl font-bold">Open Tickets</h1></section>
-                <section id="dispatch-screen" class="screen hidden p-6 w-full"><h1 class="text-3xl font-bold">Dispatch Control</h1></section>
-                <section id="full-review-screen" class="screen hidden p-6 w-full"><h1 class="text-3xl font-bold">Full Review</h1></section>
+                    <button class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3.5 rounded-md mt-4 transition-colors text-lg">SEND ORDER</button>
+                </div>
             </div>
         </main>
+    </div>
+
+    <!-- Pizza Customization Modal -->
+    <div id="pizza-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden backdrop-blur-sm">
+        <div class="bg-slate-800 rounded-lg shadow-xl w-full max-w-4xl h-[90%] flex flex-col border border-slate-700">
+            <header class="p-4 border-b border-slate-700">
+                <h2 class="text-2xl font-bold" id="modal-pizza-name">Customize Pizza</h2>
+            </header>
+            <div class="flex-1 p-4 overflow-y-auto" id="toppings-grid">
+                <!-- Toppings will be injected here -->
+            </div>
+            <footer class="p-4 flex justify-end space-x-3 bg-slate-900/50 border-t border-slate-700">
+                <button id="cancel-pizza-btn" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-md font-semibold">Cancel</button>
+                <button id="add-pizza-btn" class="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-md font-bold">Add to Order</button>
+            </footer>
+        </div>
     </div>
     
     <!-- Custom Logic Script -->
